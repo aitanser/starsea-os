@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星海量子通用操作系统 · StarseaOS</title>
+    <meta name="description" content="星海量子通用操作系统 —— 多用户、多语言、高安全量子终端配置平台">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== 全局变量 ===== */
+        :root {
+            --primary-400: #22d3ee;
+            --primary-500: #06b6d4;
+            --primary-600: #0891b2;
+            --secondary-400: #60a5fa;
+            --secondary-500: #3b82f6;
+            --secondary-600: #2563eb;
+            --bg-page: #f4f6fa;
+            --bg-card: #ffffff;
+            --text-title: #0f172a;
+            --text-desc: #334155;
+            --text-muted: #5f6c80;
+            --border-light: #e9edf2;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.02);
+            --shadow-md: 0 4px 12px rgba(0,20,40,0.04);
+            --shadow-hover: 0 12px 24px -8px rgba(6,182,212,0.15);
+            --radius-card: 20px;
+            --transition: all 0.2s ease;
+            --space-xs: 0.5rem;
+            --space-sm: 0.75rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --touch-target-size: 44px;
+        }
+
+        /* 深色模式 */
+        body.dark-mode {
+            --bg-page: #0b1423;
+            --bg-card: #1a2639;
+            --text-title: #e2eafc;
+            --text-desc: #b9d1ec;
+            --text-muted: #7f9bc0;
+            --border-light: #2d3f5e;
+            --shadow-hover: 0 12px 24px -8px #06b6d440;
+        }
+
+        /* 紫罗兰主题 */
+        body.theme-violet {
+            --primary-400: #c084fc;
+            --primary-500: #a855f7;
+            --primary-600: #9333ea;
+            --secondary-400: #f0abfc;
+            --secondary-500: #e879f9;
+            --secondary-600: #d946ef;
+        }
+
+        /* 薄荷绿主题 */
+        body.theme-mint {
+            --primary-400: #6ee7b7;
+            --primary-500: #34d399;
+            --primary-600: #10b981;
+            --secondary-400: #a7f3d0;
+            --secondary-500: #6ee7b7;
+            --secondary-600: #34d399;
+        }
+
+        /* 落日橙主题 */
+        body.theme-sunset {
+            --primary-400: #fdba74;
+            --primary-500: #fb923c;
+            --primary-600: #f97316;
+            --secondary-400: #fed7aa;
+            --secondary-500: #fdba74;
+            --secondary-600: #fb923c;
+        }
+
+        /* 樱花粉主题 */
+        body.theme-sakura {
+            --primary-400: #f9a8d4;
+            --primary-500: #f472b6;
+            --primary-600: #ec4899;
+            --secondary-400: #fbcfe8;
+            --secondary-500: #f9a8d4;
+            --secondary-600: #f472b6;
+        }
+
+        /* 基础样式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-title);
+            line-height: 1.5;
+            transition: background 0.3s, color 0.3s;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 var(--space-md); }
+
+        /* 头部样式 */
+        header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-light);
+            padding: var(--space-md) 0;
+            margin-bottom: var(--space-lg);
+        }
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        .site-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-600);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        .site-title i { color: var(--secondary-500); }
+        .mobile-menu-toggle {
+            display: none;
+            background: var(--bg-page);
+            border: 1px solid var(--border-light);
+            color: var(--text-title);
+            width: var(--touch-target-size);
+            height: var(--touch-target-size);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            align-items: center;
+            justify-content: center;
+        }
+        .main-nav {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+        .main-nav a {
+            color: var(--text-title);
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 30px;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        .main-nav a:hover { background: var(--primary-500); color: white; }
+        .main-nav a.active { background: var(--primary-500); color: white; font-weight: 500; }
+        .theme-controls { display: flex; gap: 0.5rem; align-items: center; }
+        .theme-toggle {
+            background: var(--bg-page);
+            border: 1px solid var(--border-light);
+            color: var(--text-title);
+            width: var(--touch-target-size);
+            height: var(--touch-target-size);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+        .theme-toggle:hover { border-color: var(--primary-400); transform: rotate(15deg); }
+        .theme-palette { position: relative; }
+        .theme-palette-btn {
+            background: var(--bg-page);
+            border: 1px solid var(--border-light);
+            color: var(--text-title);
+            width: var(--touch-target-size);
+            height: var(--touch-target-size);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+        .theme-palette-btn:hover { border-color: var(--primary-400); }
+        .theme-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: var(--space-sm);
+            box-shadow: var(--shadow-md);
+            display: none;
+            z-index: 200;
+            width: 180px;
+            margin-top: 8px;
+        }
+        .theme-dropdown.show { display: block; }
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            cursor: pointer;
+            border-radius: 30px;
+            transition: var(--transition);
+        }
+        .theme-option:hover { background: var(--bg-page); }
+        .theme-option.active { background: var(--primary-500); color: white; }
+        .theme-color-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--border-light);
+        }
+
+        /* 响应式导航 */
+        @media (max-width: 700px) {
+            .mobile-menu-toggle { display: flex; }
+            .main-nav {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: var(--bg-card);
+                flex-direction: column;
+                padding: var(--space-md);
+                border-bottom: 1px solid var(--border-light);
+                box-shadow: var(--shadow-md);
+                z-index: 100;
+            }
+            .main-nav.show { display: flex; }
+            .main-nav a { padding: var(--space-sm); width: 100%; text-align: center; }
+            .header-inner { flex-wrap: wrap; }
+            .theme-controls { margin-left: auto; }
+        }
+
+        /* 面包屑 */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-lg);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+        .breadcrumb a:hover { color: var(--primary-600); }
+        .breadcrumb i { font-size: 0.7rem; }
+
+        /* 统计栏 */
+        .stats-mini {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            background: var(--bg-card);
+            border-radius: 40px;
+            padding: var(--space-sm) var(--space-lg);
+            border: 1px solid var(--border-light);
+            margin-bottom: var(--space-lg);
+            justify-content: space-around;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            color: var(--text-desc);
+        }
+        .stat-item i { color: var(--primary-500); width: 20px; }
+        .stat-item span { font-weight: 600; color: var(--text-title); margin-left: 2px; }
+
+        /* 分类卡片网格 */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+        .category-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-card);
+            padding: var(--space-xl);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            text-decoration: none;
+            color: inherit;
+            text-align: center;
+        }
+        .category-card:hover {
+            border-color: var(--primary-400);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-4px);
+        }
+        .category-icon { font-size: 2.5rem; color: var(--primary-500); margin-bottom: var(--space-md); }
+        .category-title { font-size: 1.5rem; font-weight: 700; margin-bottom: var(--space-xs); }
+        .category-count { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* 预览标题 */
+        .preview-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: var(--space-xl) 0 var(--space-lg);
+            color: var(--primary-600);
+        }
+
+        /* 功能特性卡片 */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-lg) 0;
+        }
+        .feature-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-card);
+            padding: var(--space-lg);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+        .feature-card:hover {
+            border-color: var(--primary-400);
+            box-shadow: var(--shadow-hover);
+        }
+        .feature-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: var(--space-xs);
+            color: var(--text-title);
+        }
+        .feature-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary-500);
+            margin-bottom: var(--space-sm);
+        }
+
+        /* 版本信息 */
+        .version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: var(--primary-500);
+            color: white;
+            padding: var(--space-xs) var(--space-md);
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* 步骤列表 */
+        .steps {
+            background: var(--bg-card);
+            border-radius: var(--radius-card);
+            padding: var(--space-xl);
+            border: 1px solid var(--border-light);
+            margin: var(--space-lg) 0;
+        }
+        .steps code {
+            background: var(--bg-page);
+            padding: 0.2em 0.4em;
+            border-radius: 6px;
+            font-size: 0.9em;
+            color: var(--primary-600);
+        }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: var(--space-xl) 0;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-light);
+            margin-top: var(--space-xl);
+        }
+        footer a { color: var(--primary-500); text-decoration: none; margin: 0 var(--space-xs); }
+        footer a:hover { text-decoration: underline; }
+
+        .loading, .error-state, .empty-state {
+            text-align: center;
+            padding: var(--space-xl);
+            background: var(--bg-card);
+            border-radius: var(--radius-card);
+        }
+    </style>
+</head>
+<body class="theme-cyan">
+    <header>
+        <div class="container">
+            <div class="header-inner">
+                <div class="site-title"><i class="fas fa-atom"></i> 星海量子通用操作系统</div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="菜单">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav class="main-nav" id="mainNav">
+                    <a href="#overview" class="active">概览</a>
+                    <a href="#features">特性</a>
+                    <a href="#architecture">架构</a>
+                    <a href="#install">安装</a>
+                    <a href="#versions">版本</a>
+                    <a href="#contact">联系</a>
+                </nav>
+                <div class="theme-controls">
+                    <div class="theme-palette">
+                        <button class="theme-palette-btn" id="themePaletteBtn" title="主题颜色"><i class="fas fa-palette"></i></button>
+                        <div class="theme-dropdown" id="themeDropdown">
+                            <div class="theme-option active" data-theme="cyan"><span class="theme-color-dot" style="background: #06b6d4;"></span> 青蓝</div>
+                            <div class="theme-option" data-theme="violet"><span class="theme-color-dot" style="background: #a855f7;"></span> 紫罗兰</div>
+                            <div class="theme-option" data-theme="mint"><span class="theme-color-dot" style="background: #34d399;"></span> 薄荷绿</div>
+                            <div class="theme-option" data-theme="sunset"><span class="theme-color-dot" style="background: #fb923c;"></span> 落日橙</div>
+                            <div class="theme-option" data-theme="sakura"><span class="theme-color-dot" style="background: #f472b6;"></span> 樱花粉</div>
+                        </div>
+                    </div>
+                    <button class="theme-toggle" id="themeToggle" title="深色模式"><i class="fas fa-moon"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="breadcrumb" id="breadcrumb">
+            <a href="#"><i class="fas fa-home"></i> 首页</a>
+            <i class="fas fa-chevron-right"></i>
+            <span>项目概览</span>
+        </div>
+
+        <!-- 统计栏 -->
+        <div class="stats-mini" id="statsMini">
+            <div class="stat-item"><i class="fas fa-code"></i> 代码模块 <span id="statModules">40+</span></div>
+            <div class="stat-item"><i class="fas fa-language"></i> 支持语言 <span id="statLangs">8</span></div>
+            <div class="stat-item"><i class="fas fa-terminal"></i> 终端命令 <span id="statCmds">80+</span></div>
+            <div class="stat-item"><i class="fas fa-shield-haltered"></i> 安全等级 <span id="statSec">企业级</span></div>
+        </div>
+
+        <!-- 核心特性卡片 -->
+        <div class="category-grid" id="overview">
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-user-shield"></i></div>
+                <div class="category-title">三级权限</div>
+                <div class="category-count">user / admin / developer</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-lock"></i></div>
+                <div class="category-title">全盘加密</div>
+                <div class="category-count">Fernet AES-128 CBC + HMAC</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-language"></i></div>
+                <div class="category-title">多语言</div>
+                <div class="category-count">8 种语言 · 中文 English 日本語 等</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                <div class="category-title">远程升级</div>
+                <div class="category-count">GitHub Release 自动更新</div>
+            </div>
+        </div>
+
+        <!-- 功能特性 -->
+        <h2 class="preview-title" id="features"><i class="fas fa-star"></i> 核心功能特性</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-terminal"></i></div>
+                <h4>量子终端</h4>
+                <p>80+ 内置命令，Tab 补全，历史记录，别名，收藏夹，多会话管理</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-folder-tree"></i></div>
+                <h4>虚拟文件系统</h4>
+                <p>支持目录创建、文件读写、权限控制、软链接，数据 JSON 存储</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-clock"></i></div>
+                <h4>定时任务</h4>
+                <p>自动备份（10分钟）、定时报告（1小时）、Cron 表达式、自愈守护</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-palette"></i></div>
+                <h4>颜色主题</h4>
+                <p>7 种 ANSI 终端配色，深色/浅色模式一键切换</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-plug"></i></div>
+                <h4>插件系统</h4>
+                <p>动态加载 Python 模块，扩展终端功能，支持自定义命令</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-shield-virus"></i></div>
+                <h4>安全审计</h4>
+                <p>所有敏感操作独立记录，支持检索和开发者审计</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-network-wired"></i></div>
+                <h4>网络工具</h4>
+                <p>ping、traceroute、SCP 安全传输、邮件通知</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-key"></i></div>
+                <h4>双因素认证</h4>
+                <p>TOTP 动态码保护高权限账户，可选启用</p>
+            </div>
+        </div>
+
+        <!-- 系统架构 -->
+        <h2 class="preview-title" id="architecture"><i class="fas fa-sitemap"></i> 系统架构</h2>
+        <div class="steps">
+            <pre style="overflow-x: auto; font-size: 0.85rem; color: var(--text-desc);"><code>星海量子操作系统/
+├── 组件/                     # 系统运行目录
+│   ├── main.py               # 主入口
+│   ├── system/               # 核心模块（40+）
+│   │   ├── config.py         # 配置与多语言
+│   │   ├── utils.py          # 加密、文件、用户
+│   │   ├── terminal.py       # 终端交互核心
+│   │   └── ...
+│   ├── 关于/                 # 产品文档
+│   ├── 数据集/               # 参考数据
+│   └── 示例文档/             # 空白模板
+└── G_D_蓝域星河的数据储存库/ # 用户数据仓库</code></pre>
+        </div>
+
+        <!-- 安装步骤 -->
+        <h2 class="preview-title" id="install"><i class="fas fa-download"></i> 安装与运行</h2>
+        <div class="steps">
+            <p style="margin-bottom: var(--space-md);"><span class="version-badge"><i class="fas fa-tag"></i> v1.0.0</span></p>
+            <p style="margin-bottom: var(--space-sm);"><strong>环境要求：</strong>Python 3.8+</p>
+            <p style="margin-bottom: var(--space-md);"><strong>依赖安装：</strong></p>
+            <p><code>pip install -r requirements.txt</code></p>
+            <p style="margin-top: var(--space-md); margin-bottom: var(--space-sm);"><strong>启动系统：</strong></p>
+            <p><code>cd 组件 &amp;&amp; python main.py</code></p>
+        </div>
+
+        <!-- 版本历史 -->
+        <h2 class="preview-title" id="versions"><i class="fas fa-history"></i> 版本历史</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-flask"></i></div>
+                <h4>beta 0.0.1 <span style="font-size:0.75rem;color:var(--text-muted);">2025-06-10</span></h4>
+                <p>初始版本：多语言支持、基础用户管理、加密配置、量子终端框架</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-rocket"></i></div>
+                <h4>beta 1.0.0 <span style="font-size:0.75rem;color:var(--text-muted);">2025-06-25</span></h4>
+                <p>完整版：80+命令、VFS、插件、双因素认证、GitHub升级、安全审计</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-crown"></i></div>
+                <h4>v1.0.0 正式版 <span style="font-size:0.75rem;color:var(--text-muted);">2026-05-13</span></h4>
+                <p>稳定发行：跨平台修复、自动文件夹重命名、优化初始化流程</p>
+            </div>
+        </div>
+
+        <!-- 许可证 -->
+        <h2 class="preview-title" id="license"><i class="fas fa-gavel"></i> 许可证</h2>
+        <div class="steps">
+            <p>本项目采用专有许可证，仅供授权使用。版权所有 © 蓝域星河有限公司集团。</p>
+            <p style="margin-top: var(--space-sm);">详细条款请参阅项目根目录下的 <code>LICENSE.txt</code> 文件。</p>
+        </div>
+    </main>
+
+    <footer id="contact">
+        <div class="container">
+            <p>
+                <strong>星海量子通用操作系统</strong> · StarseaOS
+            </p>
+            <p>
+                <a href="https://watchfleeting.github.io/starsea-web/" target="_blank" rel="noopener"><i class="fas fa-globe"></i> 官方网站</a>
+                <a href="https://github.com" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
+                <a href="mailto:contact@starsea.dev"><i class="fas fa-envelope"></i> 邮件联系</a>
+            </p>
+            <p style="font-size: 0.8rem; margin-top: var(--space-sm);">
+                Developed by 蓝域星河有限公司集团 &copy; 2025–2026
+            </p>
+        </div>
+    </footer>
+
+    <!-- ========== 主题切换脚本 ========== -->
+    <script>
+        (function() {
+            // 深色模式切换
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+
+            // 从 localStorage 读取保存的主题
+            const savedDark = localStorage.getItem('darkMode');
+            if (savedDark === 'true') {
+                body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+
+            themeToggle.addEventListener('click', function() {
+                body.classList.toggle('dark-mode');
+                const isDark = body.classList.contains('dark-mode');
+                localStorage.setItem('darkMode', isDark);
+                themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            });
+
+            // 配色主题切换
+            const themePaletteBtn = document.getElementById('themePaletteBtn');
+            const themeDropdown = document.getElementById('themeDropdown');
+            const themeOptions = document.querySelectorAll('.theme-option');
+
+            themePaletteBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                themeDropdown.classList.toggle('show');
+            });
+
+            document.addEventListener('click', function() {
+                themeDropdown.classList.remove('show');
+            });
+
+            // 从 localStorage 读取保存的配色主题
+            const savedTheme = localStorage.getItem('colorTheme') || 'cyan';
+            body.className = body.className.replace(/theme-\w+/g, '');
+            body.classList.add('theme-' + savedTheme);
+            if (savedDark === 'true') body.classList.add('dark-mode');
+
+            themeOptions.forEach(function(option) {
+                if (option.getAttribute('data-theme') === savedTheme) {
+                    option.classList.add('active');
+                }
+                option.addEventListener('click', function() {
+                    const theme = this.getAttribute('data-theme');
+                    body.className = body.className.replace(/theme-\w+/g, '');
+                    body.classList.add('theme-' + theme);
+                    if (body.classList.contains('dark-mode')) {
+                        // 保持深色模式
+                    }
+                    themeOptions.forEach(function(o) { o.classList.remove('active'); });
+                    this.classList.add('active');
+                    localStorage.setItem('colorTheme', theme);
+                    themeDropdown.classList.remove('show');
+                });
+            });
+
+            // 移动端菜单
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mainNav = document.getElementById('mainNav');
+            mobileMenuToggle.addEventListener('click', function() {
+                mainNav.classList.toggle('show');
+            });
+
+            // 平滑滚动
+            document.querySelectorAll('.main-nav a[href^="#"]').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        mainNav.classList.remove('show');
+                        // 更新 active 状态
+                        document.querySelectorAll('.main-nav a').forEach(function(a) { a.classList.remove('active'); });
+                        this.classList.add('active');
+                    }
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
