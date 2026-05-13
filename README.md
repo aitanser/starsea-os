@@ -80,5 +80,5 @@ python main.py
 
 ## 联系我们
 
-官方网站：[https://hz-lyxh.github.io/blog/] 
+官方网站：[https://hz-lyxh.github.io/bloge/] 
 系统网站：[https://hz-lyxh.github.io/StarseaOS/] 
