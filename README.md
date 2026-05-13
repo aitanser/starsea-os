@@ -80,5 +80,5 @@ python main.py
 
 ## 联系我们
 
-官方网站：[待补充]  
-电子邮箱：[待补充]
+官方网站：[https://hz-lyxh.github.io/StarseaOS/]  
+电子邮箱：[lzc 737507@outlook. com]
