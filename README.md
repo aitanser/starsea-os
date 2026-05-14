@@ -85,5 +85,5 @@ python main.py
 详细条款请参阅 LICENSE.txt。
 
 ### 联系我们
-官方网站：[https://hz-lyxh.github.io/bloge/] 
+官方网站：[https://hz-lyxh.github.io/bloge/]  
 系统网站：[https://hz-lyxh.github.io/StarseaOS/]
