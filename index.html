@@ -2,661 +2,680 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>星海量子通用操作系统 · StarseaOS</title>
-    <meta name="description" content="星海量子通用操作系统 —— 多用户、多语言、高安全量子终端配置平台">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>星海量子操作系统 · StarseaOS | 企业级安全终端</title>
+    <meta name="description" content="星海量子通用操作系统 —— 多用户、多语言、高安全量子终端配置平台，集成应用/插件市场、虚拟文件系统、双因素认证等企业级特性">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ===== 全局变量 ===== */
-        :root {
-            --primary-400: #22d3ee;
-            --primary-500: #06b6d4;
-            --primary-600: #0891b2;
-            --secondary-400: #60a5fa;
-            --secondary-500: #3b82f6;
-            --secondary-600: #2563eb;
-            --bg-page: #f4f6fa;
-            --bg-card: #ffffff;
-            --text-title: #0f172a;
-            --text-desc: #334155;
-            --text-muted: #5f6c80;
-            --border-light: #e9edf2;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.02);
-            --shadow-md: 0 4px 12px rgba(0,20,40,0.04);
-            --shadow-hover: 0 12px 24px -8px rgba(6,182,212,0.15);
-            --radius-card: 20px;
-            --transition: all 0.2s ease;
-            --space-xs: 0.5rem;
-            --space-sm: 0.75rem;
-            --space-md: 1rem;
-            --space-lg: 1.5rem;
-            --space-xl: 2rem;
-            --touch-target-size: 44px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* 深色模式 */
-        body.dark-mode {
-            --bg-page: #0b1423;
-            --bg-card: #1a2639;
-            --text-title: #e2eafc;
-            --text-desc: #b9d1ec;
-            --text-muted: #7f9bc0;
-            --border-light: #2d3f5e;
-            --shadow-hover: 0 12px 24px -8px #06b6d440;
-        }
-
-        /* 紫罗兰主题 */
-        body.theme-violet {
-            --primary-400: #c084fc;
-            --primary-500: #a855f7;
-            --primary-600: #9333ea;
-            --secondary-400: #f0abfc;
-            --secondary-500: #e879f9;
-            --secondary-600: #d946ef;
-        }
-
-        /* 薄荷绿主题 */
-        body.theme-mint {
-            --primary-400: #6ee7b7;
-            --primary-500: #34d399;
-            --primary-600: #10b981;
-            --secondary-400: #a7f3d0;
-            --secondary-500: #6ee7b7;
-            --secondary-600: #34d399;
-        }
-
-        /* 落日橙主题 */
-        body.theme-sunset {
-            --primary-400: #fdba74;
-            --primary-500: #fb923c;
-            --primary-600: #f97316;
-            --secondary-400: #fed7aa;
-            --secondary-500: #fdba74;
-            --secondary-600: #fb923c;
-        }
-
-        /* 樱花粉主题 */
-        body.theme-sakura {
-            --primary-400: #f9a8d4;
-            --primary-500: #f472b6;
-            --primary-600: #ec4899;
-            --secondary-400: #fbcfe8;
-            --secondary-500: #f9a8d4;
-            --secondary-600: #f472b6;
-        }
-
-        /* 基础样式 */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--bg-page);
-            color: var(--text-title);
-            line-height: 1.5;
-            transition: background 0.3s, color 0.3s;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background 0.3s, color 0.2s;
+            scroll-behavior: smooth;
         }
-        .container { max-width: 1000px; margin: 0 auto; padding: 0 var(--space-md); }
 
-        /* 头部样式 */
-        header {
-            background: var(--bg-card);
-            border-bottom: 1px solid var(--border-light);
-            padding: var(--space-md) 0;
-            margin-bottom: var(--space-lg);
+        /* 全局变量 */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --primary: #06b6d4;
+            --primary-dark: #0891b2;
+            --primary-light: #22d3ee;
+            --secondary: #3b82f6;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
+            --gradient-primary: linear-gradient(135deg, #06b6d4, #3b82f6);
+            --gradient-dark: linear-gradient(135deg, #0f172a, #1e293b);
+            --radius-sm: 0.5rem;
+            --radius-md: 1rem;
+            --radius-lg: 1.5rem;
+            --radius-xl: 2rem;
         }
-        .header-inner {
+
+        /* 暗色模式 */
+        body.dark {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        /* 紫罗兰主题变量（动态切换） */
+        body.theme-violet {
+            --primary: #a855f7;
+            --primary-dark: #9333ea;
+            --primary-light: #c084fc;
+            --secondary: #e879f9;
+            --gradient-primary: linear-gradient(135deg, #a855f7, #e879f9);
+        }
+
+        body.theme-mint {
+            --primary: #34d399;
+            --primary-dark: #10b981;
+            --primary-light: #6ee7b7;
+            --secondary: #6ee7b7;
+            --gradient-primary: linear-gradient(135deg, #34d399, #10b981);
+        }
+
+        body.theme-sunset {
+            --primary: #fb923c;
+            --primary-dark: #f97316;
+            --primary-light: #fdba74;
+            --secondary: #fed7aa;
+            --gradient-primary: linear-gradient(135deg, #fb923c, #f97316);
+        }
+
+        body.theme-sakura {
+            --primary: #f472b6;
+            --primary-dark: #ec4899;
+            --primary-light: #f9a8d4;
+            --secondary: #fbcfe8;
+            --gradient-primary: linear-gradient(135deg, #f472b6, #ec4899);
+        }
+
+        /* 平滑滚动 */
+        html {
+            scroll-padding-top: 5rem;
+        }
+
+        /* 容器 */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* 玻璃导航栏 */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+        body.dark .navbar {
+            background: rgba(15, 23, 42, 0.8);
+        }
+        .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            position: relative;
-        }
-        .site-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary-600);
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-        }
-        .site-title i { color: var(--secondary-500); }
-        .mobile-menu-toggle {
-            display: none;
-            background: var(--bg-page);
-            border: 1px solid var(--border-light);
-            color: var(--text-title);
-            width: var(--touch-target-size);
-            height: var(--touch-target-size);
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            align-items: center;
-            justify-content: center;
-        }
-        .main-nav {
-            display: flex;
-            gap: 0.3rem;
+            padding: 1rem 0;
             flex-wrap: wrap;
         }
-        .main-nav a {
-            color: var(--text-title);
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+        .logo span {
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            color: var(--primary);
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        .nav-links a {
             text-decoration: none;
-            padding: 0.4rem 0.8rem;
-            border-radius: 30px;
-            transition: var(--transition);
-            font-size: 0.9rem;
-            white-space: nowrap;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: color 0.2s;
         }
-        .main-nav a:hover { background: var(--primary-500); color: white; }
-        .main-nav a.active { background: var(--primary-500); color: white; font-weight: 500; }
-        .theme-controls { display: flex; gap: 0.5rem; align-items: center; }
-        .theme-toggle {
-            background: var(--bg-page);
-            border: 1px solid var(--border-light);
-            color: var(--text-title);
-            width: var(--touch-target-size);
-            height: var(--touch-target-size);
-            border-radius: 50%;
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        .theme-buttons {
             display: flex;
+            gap: 0.75rem;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 1.2rem;
         }
-        .theme-toggle:hover { border-color: var(--primary-400); transform: rotate(15deg); }
-        .theme-palette { position: relative; }
-        .theme-palette-btn {
-            background: var(--bg-page);
-            border: 1px solid var(--border-light);
-            color: var(--text-title);
-            width: var(--touch-target-size);
-            height: var(--touch-target-size);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .icon-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 2rem;
+            padding: 0.5rem 0.9rem;
             cursor: pointer;
-            transition: var(--transition);
-            font-size: 1.2rem;
+            transition: all 0.2s;
+            color: var(--text-primary);
+            font-size: 1rem;
         }
-        .theme-palette-btn:hover { border-color: var(--primary-400); }
-        .theme-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: var(--bg-card);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-card);
-            padding: var(--space-sm);
-            box-shadow: var(--shadow-md);
+        .icon-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .mobile-menu {
             display: none;
-            z-index: 200;
-            width: 180px;
-            margin-top: 8px;
-        }
-        .theme-dropdown.show { display: block; }
-        .theme-option {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-sm) var(--space-md);
+            background: none;
+            border: none;
+            font-size: 1.5rem;
             cursor: pointer;
-            border-radius: 30px;
-            transition: var(--transition);
-        }
-        .theme-option:hover { background: var(--bg-page); }
-        .theme-option.active { background: var(--primary-500); color: white; }
-        .theme-color-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 2px solid var(--border-light);
+            color: var(--text-primary);
         }
 
-        /* 响应式导航 */
-        @media (max-width: 700px) {
-            .mobile-menu-toggle { display: flex; }
-            .main-nav {
+        @media (max-width: 768px) {
+            .nav-links {
                 display: none;
-                position: absolute;
-                top: 70px;
-                left: 0;
-                right: 0;
-                background: var(--bg-card);
+                width: 100%;
                 flex-direction: column;
-                padding: var(--space-md);
-                border-bottom: 1px solid var(--border-light);
-                box-shadow: var(--shadow-md);
-                z-index: 100;
+                gap: 1rem;
+                padding: 1rem 0;
             }
-            .main-nav.show { display: flex; }
-            .main-nav a { padding: var(--space-sm); width: 100%; text-align: center; }
-            .header-inner { flex-wrap: wrap; }
-            .theme-controls { margin-left: auto; }
+            .nav-links.show {
+                display: flex;
+            }
+            .mobile-menu {
+                display: block;
+            }
+            .theme-buttons {
+                order: 2;
+            }
         }
 
-        /* 面包屑 */
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: var(--space-xs);
-            margin-bottom: var(--space-lg);
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-        .breadcrumb a { color: var(--text-muted); text-decoration: none; }
-        .breadcrumb a:hover { color: var(--primary-600); }
-        .breadcrumb i { font-size: 0.7rem; }
-
-        /* 统计栏 */
-        .stats-mini {
-            display: flex;
-            gap: var(--space-md);
-            flex-wrap: wrap;
-            background: var(--bg-card);
-            border-radius: 40px;
-            padding: var(--space-sm) var(--space-lg);
-            border: 1px solid var(--border-light);
-            margin-bottom: var(--space-lg);
-            justify-content: space-around;
-        }
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.9rem;
-            color: var(--text-desc);
-        }
-        .stat-item i { color: var(--primary-500); width: 20px; }
-        .stat-item span { font-weight: 600; color: var(--text-title); margin-left: 2px; }
-
-        /* 分类卡片网格 */
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: var(--space-lg);
-            margin: var(--space-xl) 0;
-        }
-        .category-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-card);
-            padding: var(--space-xl);
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-md);
-            transition: var(--transition);
+        /* 按钮 */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
             text-decoration: none;
-            color: inherit;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .btn-outline {
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-primary);
+        }
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* 标题区 */
+        .hero {
+            padding: 4rem 0 5rem;
             text-align: center;
         }
-        .category-card:hover {
-            border-color: var(--primary-400);
-            box-shadow: var(--shadow-hover);
-            transform: translateY(-4px);
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
         }
-        .category-icon { font-size: 2.5rem; color: var(--primary-500); margin-bottom: var(--space-md); }
-        .category-title { font-size: 1.5rem; font-weight: 700; margin-bottom: var(--space-xs); }
-        .category-count { color: var(--text-muted); font-size: 0.9rem; }
-
-        /* 预览标题 */
-        .preview-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin: var(--space-xl) 0 var(--space-lg);
-            color: var(--primary-600);
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: var(--bg-secondary);
+            border-radius: 2rem;
+            padding: 0.3rem 1rem;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
         }
 
-        /* 功能特性卡片 */
-        .feature-grid {
+        /* 统计卡片 */
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            padding: 1.5rem 2rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            min-width: 140px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        /* 通用区块 */
+        .section {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .section-title i {
+            color: var(--primary);
+            margin-right: 0.5rem;
+        }
+
+        /* 卡片网格 */
+        .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: var(--space-lg);
-            margin: var(--space-lg) 0;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
         }
         .feature-card {
             background: var(--bg-card);
-            border-radius: var(--radius-card);
-            padding: var(--space-lg);
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-md);
-            transition: var(--transition);
+            border-radius: var(--radius-lg);
+            padding: 1.8rem;
+            transition: all 0.3s;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
         }
         .feature-card:hover {
-            border-color: var(--primary-400);
-            box-shadow: var(--shadow-hover);
-        }
-        .feature-card h4 {
-            font-size: 1.1rem;
-            margin-bottom: var(--space-xs);
-            color: var(--text-title);
-        }
-        .feature-card p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
+            transform: translateY(-6px);
+            border-color: var(--primary-light);
+            box-shadow: var(--shadow-lg);
         }
         .feature-icon {
-            font-size: 2rem;
-            color: var(--primary-500);
-            margin-bottom: var(--space-sm);
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .new-tag {
+            background: var(--primary);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 1rem;
+            margin-left: 0.5rem;
+            vertical-align: middle;
         }
 
-        /* 版本信息 */
-        .version-badge {
+        /* 架构预展示 */
+        .arch-preview {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+        }
+        .arch-preview pre {
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        /* 安装步骤 */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .step {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 2rem;
             display: inline-flex;
             align-items: center;
-            gap: var(--space-xs);
-            background: var(--primary-500);
-            color: white;
-            padding: var(--space-xs) var(--space-md);
-            border-radius: 30px;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .code-block {
+            background: var(--bg-primary);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            font-family: monospace;
             font-size: 0.9rem;
-            font-weight: 600;
+            border: 1px solid var(--border);
+            margin-top: 0.5rem;
         }
 
-        /* 步骤列表 */
-        .steps {
-            background: var(--bg-card);
-            border-radius: var(--radius-card);
-            padding: var(--space-xl);
-            border: 1px solid var(--border-light);
-            margin: var(--space-lg) 0;
+        /* 版本时间线 */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
-        .steps code {
-            background: var(--bg-page);
-            padding: 0.2em 0.4em;
-            border-radius: 6px;
-            font-size: 0.9em;
-            color: var(--primary-600);
+        .timeline-item {
+            display: flex;
+            gap: 1.5rem;
+            border-left: 2px solid var(--primary);
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .timeline-date {
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 100px;
         }
 
         /* 页脚 */
         footer {
+            background: var(--bg-secondary);
+            padding: 2.5rem 0;
             text-align: center;
-            padding: var(--space-xl) 0;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border-light);
-            margin-top: var(--space-xl);
+            border-top: 1px solid var(--border);
         }
-        footer a { color: var(--primary-500); text-decoration: none; margin: 0 var(--space-xs); }
-        footer a:hover { text-decoration: underline; }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            color: var(--primary);
+        }
 
-        .loading, .error-state, .empty-state {
-            text-align: center;
-            padding: var(--space-xl);
-            background: var(--bg-card);
-            border-radius: var(--radius-card);
+        /* 动画 */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate {
+            animation: fadeUp 0.6s ease-out;
         }
     </style>
 </head>
-<body class="theme-cyan">
-    <header>
-        <div class="container">
-            <div class="header-inner">
-                <div class="site-title"><i class="fas fa-atom"></i> 星海量子通用操作系统</div>
-                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="菜单">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <nav class="main-nav" id="mainNav">
-                    <a href="#overview" class="active">概览</a>
-                    <a href="#features">特性</a>
-                    <a href="#architecture">架构</a>
-                    <a href="#install">安装</a>
-                    <a href="#versions">版本</a>
-                    <a href="#contact">联系</a>
-                </nav>
-                <div class="theme-controls">
-                    <div class="theme-palette">
-                        <button class="theme-palette-btn" id="themePaletteBtn" title="主题颜色"><i class="fas fa-palette"></i></button>
-                        <div class="theme-dropdown" id="themeDropdown">
-                            <div class="theme-option active" data-theme="cyan"><span class="theme-color-dot" style="background: #06b6d4;"></span> 青蓝</div>
-                            <div class="theme-option" data-theme="violet"><span class="theme-color-dot" style="background: #a855f7;"></span> 紫罗兰</div>
-                            <div class="theme-option" data-theme="mint"><span class="theme-color-dot" style="background: #34d399;"></span> 薄荷绿</div>
-                            <div class="theme-option" data-theme="sunset"><span class="theme-color-dot" style="background: #fb923c;"></span> 落日橙</div>
-                            <div class="theme-option" data-theme="sakura"><span class="theme-color-dot" style="background: #f472b6;"></span> 樱花粉</div>
-                        </div>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <i class="fas fa-atom"></i> 星海量子<span>OS</span>
+            </div>
+            <button class="mobile-menu" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+            <div class="nav-links" id="navLinks">
+                <a href="#overview">概览</a>
+                <a href="#features">特性</a>
+                <a href="#architecture">架构</a>
+                <a href="#install">安装</a>
+                <a href="#versions">版本</a>
+                <a href="#contact">联系</a>
+            </div>
+            <div class="theme-buttons">
+                <button class="icon-btn" id="themeToggle" title="深色模式"><i class="fas fa-moon"></i></button>
+                <div class="theme-palette" style="position: relative;">
+                    <button class="icon-btn" id="paletteBtn"><i class="fas fa-palette"></i></button>
+                    <div id="paletteDropdown" class="theme-dropdown" style="display: none; position: absolute; right: 0; top: 2.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 1rem; padding: 0.5rem; z-index: 100; width: 150px;">
+                        <div data-theme="cyan" class="theme-opt" style="padding: 0.5rem; cursor: pointer;">🌊 青蓝</div>
+                        <div data-theme="violet" class="theme-opt" style="padding: 0.5rem; cursor: pointer;">🪻 紫罗兰</div>
+                        <div data-theme="mint" class="theme-opt" style="padding: 0.5rem; cursor: pointer;">🌿 薄荷绿</div>
+                        <div data-theme="sunset" class="theme-opt" style="padding: 0.5rem; cursor: pointer;">🌅 落日橙</div>
+                        <div data-theme="sakura" class="theme-opt" style="padding: 0.5rem; cursor: pointer;">🌸 樱花粉</div>
                     </div>
-                    <button class="theme-toggle" id="themeToggle" title="深色模式"><i class="fas fa-moon"></i></button>
                 </div>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="container">
-        <div class="breadcrumb" id="breadcrumb">
-            <a href="#"><i class="fas fa-home"></i> 首页</a>
-            <i class="fas fa-chevron-right"></i>
-            <span>项目概览</span>
+    <main>
+        <!-- Hero 区域 -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-badge">
+                    <i class="fas fa-crown"></i> v1.2.0 · 市场生态完善
+                </div>
+                <h1>星海量子通用操作系统</h1>
+                <p>企业级量子终端配置平台 · 多用户、多语言、高安全 · 内置应用/插件市场</p>
+                <div>
+                    <a href="#install" class="btn btn-primary">快速开始</a>
+                    <a href="https://github.com/hz-lyxh/StarseaOS" class="btn btn-outline" style="margin-left: 1rem;">GitHub <i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 统计卡片 (动态数据) -->
+        <div class="container stats-grid">
+            <div class="stat-card"><div class="stat-number">50+</div><div>核心模块</div></div>
+            <div class="stat-card"><div class="stat-number">8</div><div>多语言支持</div></div>
+            <div class="stat-card"><div class="stat-number">80+</div><div>终端命令</div></div>
+            <div class="stat-card"><div class="stat-number">企业级</div><div>安全等级</div></div>
         </div>
 
-        <!-- 统计栏 -->
-        <div class="stats-mini" id="statsMini">
-            <div class="stat-item"><i class="fas fa-code"></i> 代码模块 <span id="statModules">40+</span></div>
-            <div class="stat-item"><i class="fas fa-language"></i> 支持语言 <span id="statLangs">8</span></div>
-            <div class="stat-item"><i class="fas fa-terminal"></i> 终端命令 <span id="statCmds">80+</span></div>
-            <div class="stat-item"><i class="fas fa-shield-haltered"></i> 安全等级 <span id="statSec">企业级</span></div>
-        </div>
+        <!-- 概览卡片区 -->
+        <section id="overview" class="section">
+            <div class="container">
+                <div class="card-grid">
+                    <div class="feature-card"><i class="fas fa-user-shield feature-icon"></i><h3>三级权限体系</h3><p>user / admin / developer，开发者需独立激活密钥，权限分层清晰。</p></div>
+                    <div class="feature-card"><i class="fas fa-lock feature-icon"></i><h3>全态加密</h3><p>Fernet AES-128 CBC + HMAC 加密配置文件，密钥 bcrypt 哈希存储。</p></div>
+                    <div class="feature-card"><i class="fas fa-language feature-icon"></i><h3>8 语言界面</h3><p>中文、English、日本語、Français、Deutsch、Español、Русский、العربية。</p></div>
+                    <div class="feature-card"><i class="fas fa-cloud-upload-alt feature-icon"></i><h3>远程升级</h3><p>GitHub Release 自动检测更新，支持一键升级迁移。</p></div>
+                </div>
+            </div>
+        </section>
 
-        <!-- 核心特性卡片 -->
-        <div class="category-grid" id="overview">
-            <div class="category-card">
-                <div class="category-icon"><i class="fas fa-user-shield"></i></div>
-                <div class="category-title">三级权限</div>
-                <div class="category-count">user / admin / developer</div>
+        <!-- 详细功能特性 -->
+        <section id="features" class="section">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-star"></i> 核心功能特性</h2>
+                <div class="card-grid">
+                    <div class="feature-card"><i class="fas fa-terminal feature-icon"></i><h3>量子终端</h3><p>80+ 内置命令，Tab 补全，历史记录，别名，收藏夹，多会话隔离。</p></div>
+                    <div class="feature-card"><i class="fas fa-folder-tree feature-icon"></i><h3>虚拟文件系统</h3><p>独立于真实磁盘，支持目录、文件、权限控制、软链接，永久化存储。</p></div>
+                    <div class="feature-card"><i class="fas fa-clock feature-icon"></i><h3>定时任务与守护</h3><p>内置调度器 (10分钟备份，1小时报告)，支持 Cron 表达式，自愈守护。</p></div>
+                    <div class="feature-card"><i class="fas fa-palette feature-icon"></i><h3>多色彩主题</h3><p>7 种 ANSI 终端配色。</p></div>
+                    <div class="feature-card"><i class="fas fa-plug feature-icon"></i><h3>插件系统 + 市场 <span class="new-tag">NEW</span></h3><p>动态加载 .py 插件，`pm` 命令支持搜索、安装、远程列表。</p></div>
+                    <div class="feature-card"><i class="fas fa-shopping-cart feature-icon"></i><h3>应用商店 <span class="new-tag">v1.2.0</span></h3><p>`app` 命令安装官方应用（文件管理器、计算器、词典等），一键注册为终端命令。</p></div>
+                    <div class="feature-card"><i class="fas fa-shield-virus feature-icon"></i><h3>安全审计与双因素</h3><p>审计日志 + TOTP 动态验证，可选硬件绑定许可证。</p></div>
+                    <div class="feature-card"><i class="fas fa-network-wired feature-icon"></i><h3>网络工具集</h3><p>ping, traceroute, SCP 加密传输, 邮件通知, 微服务抽象。</p></div>
+                    <div class="feature-card"><i class="fas fa-chart-line feature-icon"></i><h3>系统监控与诊断</h3><p>CPU/内存监控，进程管理，磁盘使用统计，一键生成诊断报告。</p></div>
+                    <div class="feature-card"><i class="fas fa-puzzle-piece feature-icon"></i><h3>独立 SDK</h3><p>提供 starsea_sdk 包，外部程序可调用用户管理、VFS、加密接口。</p></div>
+                </div>
             </div>
-            <div class="category-card">
-                <div class="category-icon"><i class="fas fa-lock"></i></div>
-                <div class="category-title">全盘加密</div>
-                <div class="category-count">Fernet AES-128 CBC + HMAC</div>
-            </div>
-            <div class="category-card">
-                <div class="category-icon"><i class="fas fa-language"></i></div>
-                <div class="category-title">多语言</div>
-                <div class="category-count">8 种语言 · 中文 English 日本語 等</div>
-            </div>
-            <div class="category-card">
-                <div class="category-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-                <div class="category-title">远程升级</div>
-                <div class="category-count">GitHub Release 自动更新</div>
-            </div>
-        </div>
+        </section>
 
-        <!-- 功能特性 -->
-        <h2 class="preview-title" id="features"><i class="fas fa-star"></i> 核心功能特性</h2>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-terminal"></i></div>
-                <h4>量子终端</h4>
-                <p>80+ 内置命令，Tab 补全，历史记录，别名，收藏夹，多会话管理</p>
+        <!-- 架构展示 -->
+        <section id="architecture" class="section">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-sitemap"></i> 系统架构</h2>
+                <div class="arch-preview">
+                    <pre>
+星海量子操作系统/
+├── 组件/                     # 运行根目录
+│   ├── main.py               # 统一启动器 (7种模式 CLI/UI/Web)
+│   ├── install_wizard.py     # 图形化/静默安装向导
+│   ├── requirements.txt
+│   ├── system/
+│   │   ├── config.py         # 多语言配置，密钥哈希
+│   │   ├── utils.py          # 加密/解密，用户管理
+│   │   ├── terminal.py       # 终端核心 (pm, app, help 分类)
+│   │   ├── plugin_market.py  # 插件市场
+│   │   ├── app_market.py     # 应用市场
+│   │   ├── web_server.py     # Flask Web 面板 (0.0.0.0)
+│   │   ├── gui_launcher.py   # PyQt5/Tkinter 图形面板
+│   │   └── ... (40+ 模块)
+│   ├── 关于/  数据集/  示例文档/
+│   └── 应用/  插件/           # 安装目录
+└── G_D_*_数据储存库/          # 用户数据仓库
+                    </pre>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-folder-tree"></i></div>
-                <h4>虚拟文件系统</h4>
-                <p>支持目录创建、文件读写、权限控制、软链接，数据 JSON 存储</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-clock"></i></div>
-                <h4>定时任务</h4>
-                <p>自动备份（10分钟）、定时报告（1小时）、Cron 表达式、自愈守护</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-palette"></i></div>
-                <h4>颜色主题</h4>
-                <p>7 种 ANSI 终端配色，深色/浅色模式一键切换</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-plug"></i></div>
-                <h4>插件系统</h4>
-                <p>动态加载 Python 模块，扩展终端功能，支持自定义命令</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-shield-virus"></i></div>
-                <h4>安全审计</h4>
-                <p>所有敏感操作独立记录，支持检索和开发者审计</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-network-wired"></i></div>
-                <h4>网络工具</h4>
-                <p>ping、traceroute、SCP 安全传输、邮件通知</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-key"></i></div>
-                <h4>双因素认证</h4>
-                <p>TOTP 动态码保护高权限账户，可选启用</p>
-            </div>
-        </div>
+        </section>
 
-        <!-- 系统架构 -->
-        <h2 class="preview-title" id="architecture"><i class="fas fa-sitemap"></i> 系统架构</h2>
-        <div class="steps">
-            <pre style="overflow-x: auto; font-size: 0.85rem; color: var(--text-desc);"><code>星海量子操作系统/
-├── 组件/                     # 系统运行目录
-│   ├── main.py               # 主入口
-│   ├── system/               # 核心模块（40+）
-│   │   ├── config.py         # 配置与多语言
-│   │   ├── utils.py          # 加密、文件、用户
-│   │   ├── terminal.py       # 终端交互核心
-│   │   └── ...
-│   ├── 关于/                 # 产品文档
-│   ├── 数据集/               # 参考数据
-│   └── 示例文档/             # 空白模板
-└── G_D_蓝域星河的数据储存库/ # 用户数据仓库</code></pre>
-        </div>
-
-        <!-- 安装步骤 -->
-        <h2 class="preview-title" id="install"><i class="fas fa-download"></i> 安装与运行</h2>
-        <div class="steps">
-            <p style="margin-bottom: var(--space-md);"><span class="version-badge"><i class="fas fa-tag"></i> v1.0.0</span></p>
-            <p style="margin-bottom: var(--space-sm);"><strong>环境要求：</strong>Python 3.8+</p>
-            <p style="margin-bottom: var(--space-md);"><strong>依赖安装：</strong></p>
-            <p><code>pip install -r requirements.txt</code></p>
-            <p style="margin-top: var(--space-md); margin-bottom: var(--space-sm);"><strong>启动系统：</strong></p>
-            <p><code>cd 组件 &amp;&amp; python main.py</code></p>
-        </div>
-
-        <!-- 版本历史 -->
-        <h2 class="preview-title" id="versions"><i class="fas fa-history"></i> 版本历史</h2>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-flask"></i></div>
-                <h4>beta 0.0.1 <span style="font-size:0.75rem;color:var(--text-muted);">2025-06-10</span></h4>
-                <p>初始版本：多语言支持、基础用户管理、加密配置、量子终端框架</p>
+        <!-- 安装与运行 (增强) -->
+        <section id="install" class="section">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-download"></i> 快速安装</h2>
+                <div class="steps-container">
+                    <div class="step"><div class="step-number">1</div><div class="step-content"><strong>环境要求</strong><div class="code-block">Python 3.8+</div></div></div>
+                    <div class="step"><div class="step-number">2</div><div class="step-content"><strong>安装依赖</strong><div class="code-block">pip install -r requirements.txt</div></div></div>
+                    <div class="step"><div class="step-number">3</div><div class="step-content"><strong>图形化安装向导 (推荐)</strong><div class="code-block">python install_wizard.py</div></div></div>
+                    <div class="step"><div class="step-number">4</div><div class="step-content"><strong>启动系统</strong><div class="code-block">python main.py  # 选择 1/2/3 进入不同模式</div></div></div>
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <span class="hero-badge">💡 静默安装: python install_wizard.py --unattended --product-key ...</span>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-rocket"></i></div>
-                <h4>beta 1.0.0 <span style="font-size:0.75rem;color:var(--text-muted);">2025-06-25</span></h4>
-                <p>完整版：80+命令、VFS、插件、双因素认证、GitHub升级、安全审计</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-crown"></i></div>
-                <h4>v1.0.0 正式版 <span style="font-size:0.75rem;color:var(--text-muted);">2026-05-13</span></h4>
-                <p>稳定发行：跨平台修复、自动文件夹重命名、优化初始化流程</p>
-            </div>
-        </div>
+        </section>
 
-        <!-- 许可证 -->
-        <h2 class="preview-title" id="license"><i class="fas fa-gavel"></i> 许可证</h2>
-        <div class="steps">
-            <p>本项目采用专有许可证，仅供授权使用。版权所有 © 蓝域星河有限公司集团。</p>
-            <p style="margin-top: var(--space-sm);">详细条款请参阅项目根目录下的 <code>LICENSE.txt</code> 文件。</p>
-        </div>
+        <!-- 版本历史 (增加 v1.2.0 新特性) -->
+        <section id="versions" class="section">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-history"></i> 版本历程</h2>
+                <div class="timeline">
+                    <div class="timeline-item"><div class="timeline-date">2025-06-10</div><div><strong>beta 0.0.1</strong> — 多语言初始化、加密配置、基础终端</div></div>
+                    <div class="timeline-item"><div class="timeline-date">2025-06-25</div><div><strong>beta 1.0.0</strong> — 80+命令, VFS, 双因素, 插件系统, GitHub升级</div></div>
+                    <div class="timeline-item"><div class="timeline-date">2026-05-13</div><div><strong>v1.0.0 正式版</strong> — 跨平台稳定, 自动数据仓库, SDK, 官方应用</div></div>
+                    <div class="timeline-item"><div class="timeline-date">2026-06-15</div><div><strong>v1.2.0</strong> — 🚀 应用/插件市场远程列表 (list-remote), 分类帮助, 图形界面双引擎(PyQt5+Tkinter), 静默安装, 零硬编码密钥, Web面板局域网访问</div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系与许可证 -->
+        <section id="contact" class="section">
+            <div class="container" style="text-align: center;">
+                <h2 class="section-title"><i class="fas fa-envelope"></i> 联系与授权</h2>
+                <p style="margin-bottom: 1rem;">专有软件许可证 · 仅供授权使用</p>
+                <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                    <a href="https://hz-lyxh.github.io/bloge/" class="btn btn-outline"><i class="fas fa-globe"></i> 公司官网</a>
+                    <a href="https://github.com/hz-lyxh/StarseaOS" class="btn btn-outline"><i class="fab fa-github"></i> GitHub</a>
+                    <a href="mailto:lzc737507@outlook.com" class="btn btn-outline"><i class="fas fa-envelope"></i> 邮件联系</a>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <footer id="contact">
+    <footer>
         <div class="container">
-            <p>
-                <strong>星海量子通用操作系统</strong> · StarseaOS
-            </p>
-            <p>
-                <a href="https://hz-lyxh.github.io/bloge/" target="_blank" rel="noopener"><i class="fas fa-globe"></i> 官方网站</a>
-                <a href="https://github.com/hz-lyxh/StarseaOS/" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
-                <a href="mailto:lzc737507@outlook.com"><i class="fas fa-envelope"></i> 邮件联系</a>
-            </p>
-            <p style="font-size: 0.8rem; margin-top: var(--space-sm);">
-                Developed by 蓝域星河有限公司集团 &copy; 2025–2026
-            </p>
+            <p>© 2025–2026 蓝域星河有限公司集团 · 星海量子通用操作系统 StarseaOS v1.2.0</p>
+            <div class="footer-links">
+                <a href="#overview">概览</a>
+                <a href="#features">特性</a>
+                <a href="#install">安装</a>
+                <a href="#versions">版本</a>
+            </div>
         </div>
     </footer>
 
-    <!-- ========== 主题切换脚本 ========== -->
     <script>
         (function() {
-            // 深色模式切换
-            const themeToggle = document.getElementById('themeToggle');
+            // 深色模式
             const body = document.body;
-
-            // 从 localStorage 读取保存的主题
+            const themeToggle = document.getElementById('themeToggle');
             const savedDark = localStorage.getItem('darkMode');
             if (savedDark === 'true') {
-                body.classList.add('dark-mode');
+                body.classList.add('dark');
                 themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
             }
-
-            themeToggle.addEventListener('click', function() {
-                body.classList.toggle('dark-mode');
-                const isDark = body.classList.contains('dark-mode');
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark');
+                const isDark = body.classList.contains('dark');
                 localStorage.setItem('darkMode', isDark);
                 themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
             });
 
-            // 配色主题切换
-            const themePaletteBtn = document.getElementById('themePaletteBtn');
-            const themeDropdown = document.getElementById('themeDropdown');
-            const themeOptions = document.querySelectorAll('.theme-option');
-
-            themePaletteBtn.addEventListener('click', function(e) {
+            // 主题颜色切换
+            const paletteBtn = document.getElementById('paletteBtn');
+            const dropdown = document.getElementById('paletteDropdown');
+            paletteBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                themeDropdown.classList.toggle('show');
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
             });
-
-            document.addEventListener('click', function() {
-                themeDropdown.classList.remove('show');
-            });
-
-            // 从 localStorage 读取保存的配色主题
+            document.addEventListener('click', () => { dropdown.style.display = 'none'; });
             const savedTheme = localStorage.getItem('colorTheme') || 'cyan';
-            body.className = body.className.replace(/theme-\w+/g, '');
-            body.classList.add('theme-' + savedTheme);
-            if (savedDark === 'true') body.classList.add('dark-mode');
-
-            themeOptions.forEach(function(option) {
-                if (option.getAttribute('data-theme') === savedTheme) {
-                    option.classList.add('active');
-                }
-                option.addEventListener('click', function() {
-                    const theme = this.getAttribute('data-theme');
-                    body.className = body.className.replace(/theme-\w+/g, '');
-                    body.classList.add('theme-' + theme);
-                    if (body.classList.contains('dark-mode')) {
-                        // 保持深色模式
-                    }
-                    themeOptions.forEach(function(o) { o.classList.remove('active'); });
-                    this.classList.add('active');
+            if (savedTheme !== 'cyan') {
+                body.classList.add(`theme-${savedTheme}`);
+            }
+            document.querySelectorAll('.theme-opt').forEach(opt => {
+                opt.addEventListener('click', (e) => {
+                    const theme = opt.getAttribute('data-theme');
+                    body.classList.remove('theme-cyan', 'theme-violet', 'theme-mint', 'theme-sunset', 'theme-sakura');
+                    if (theme !== 'cyan') body.classList.add(`theme-${theme}`);
                     localStorage.setItem('colorTheme', theme);
-                    themeDropdown.classList.remove('show');
+                    dropdown.style.display = 'none';
                 });
             });
 
             // 移动端菜单
-            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-            const mainNav = document.getElementById('mainNav');
-            mobileMenuToggle.addEventListener('click', function() {
-                mainNav.classList.toggle('show');
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            mobileBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('show');
             });
-
-            // 平滑滚动
-            document.querySelectorAll('.main-nav a[href^="#"]').forEach(function(link) {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href').substring(1);
-                    const target = document.getElementById(targetId);
+            // 平滑滚动锚点
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href === '#') return;
+                    const target = document.querySelector(href);
                     if (target) {
+                        e.preventDefault();
                         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        mainNav.classList.remove('show');
-                        // 更新 active 状态
-                        document.querySelectorAll('.main-nav a').forEach(function(a) { a.classList.remove('active'); });
-                        this.classList.add('active');
+                        navLinks.classList.remove('show');
                     }
                 });
             });
