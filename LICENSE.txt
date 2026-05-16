@@ -164,7 +164,7 @@
 如对本协议有任何疑问，或需要获取正式许可，请联系：
 
 蓝域星河有限公司集团
-系统网站：[https://hz-lyxh.github.io/StarseaOS/] 
+系统网站：[https://hz-lyxh.github.io/starsea-os/] 
 电子邮箱：[lzc737507@outlook.com]
 
 
