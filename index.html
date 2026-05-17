@@ -91,11 +91,6 @@
             --gradient-primary: linear-gradient(135deg, #f472b6, #ec4899);
         }
 
-        /* 平滑滚动 */
-        html {
-            scroll-padding-top: 5rem;
-        }
-
         /* 容器 */
         .container {
             max-width: 1280px;
@@ -435,21 +430,6 @@
         .footer-links a:hover {
             color: var(--primary);
         }
-
-        /* 动画 */
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .animate {
-            animation: fadeUp 0.6s ease-out;
-        }
     </style>
 </head>
 <body>
@@ -494,12 +474,12 @@
                 <p>企业级量子终端配置平台 · 多用户、多语言、高安全 · 内置应用/插件市场</p>
                 <div>
                     <a href="#install" class="btn btn-primary">快速开始</a>
-                    <a href="https://github.com/hz-lyxh/StarseaOS" class="btn btn-outline" style="margin-left: 1rem;">GitHub <i class="fab fa-github"></i></a>
+                    <a href="https://hz-lyxh.github.io/starsea-os/" class="btn btn-outline" style="margin-left: 1rem;">GitHub <i class="fab fa-github"></i></a>
                 </div>
             </div>
         </section>
 
-        <!-- 统计卡片 (动态数据) -->
+        <!-- 统计卡片 -->
         <div class="container stats-grid">
             <div class="stat-card"><div class="stat-number">50+</div><div>核心模块</div></div>
             <div class="stat-card"><div class="stat-number">8</div><div>多语言支持</div></div>
@@ -528,7 +508,7 @@
                     <div class="feature-card"><i class="fas fa-folder-tree feature-icon"></i><h3>虚拟文件系统</h3><p>独立于真实磁盘，支持目录、文件、权限控制、软链接，永久化存储。</p></div>
                     <div class="feature-card"><i class="fas fa-clock feature-icon"></i><h3>定时任务与守护</h3><p>内置调度器 (10分钟备份，1小时报告)，支持 Cron 表达式，自愈守护。</p></div>
                     <div class="feature-card"><i class="fas fa-palette feature-icon"></i><h3>多色彩主题</h3><p>7 种 ANSI 终端配色。</p></div>
-                    <div class="feature-card"><i class="fas fa-plug feature-icon"></i><h3>插件系统 + 市场 <span class="new-tag">NEW</span></h3><p>动态加载 .py 插件，`pm` 命令支持搜索、安装、远程列表。</p></div>
+                    <div class="feature-card"><i class="fas fa-plug feature-icon"></i><h3>插件系统 + 市场 <span class="new-tag">v1.2.0</span></h3><p>动态加载 .py 插件，`pm` 命令支持搜索、安装、远程列表。</p></div>
                     <div class="feature-card"><i class="fas fa-shopping-cart feature-icon"></i><h3>应用商店 <span class="new-tag">v1.2.0</span></h3><p>`app` 命令安装官方应用（文件管理器、计算器、词典等），一键注册为终端命令。</p></div>
                     <div class="feature-card"><i class="fas fa-shield-virus feature-icon"></i><h3>安全审计与双因素</h3><p>审计日志 + TOTP 动态验证，可选硬件绑定许可证。</p></div>
                     <div class="feature-card"><i class="fas fa-network-wired feature-icon"></i><h3>网络工具集</h3><p>ping, traceroute, SCP 加密传输, 邮件通知, 微服务抽象。</p></div>
@@ -557,7 +537,7 @@
 │   │   ├── app_market.py     # 应用市场
 │   │   ├── web_server.py     # Flask Web 面板 (0.0.0.0)
 │   │   ├── gui_launcher.py   # PyQt5/Tkinter 图形面板
-│   │   └── ... (40+ 模块)
+│   │   └── ... (50+ 模块)
 │   ├── 关于/  数据集/  示例文档/
 │   └── 应用/  插件/           # 安装目录
 └── G_D_*_数据储存库/          # 用户数据仓库
@@ -566,7 +546,7 @@
             </div>
         </section>
 
-        <!-- 安装与运行 (增强) -->
+        <!-- 安装与运行 -->
         <section id="install" class="section">
             <div class="container">
                 <h2 class="section-title"><i class="fas fa-download"></i> 快速安装</h2>
@@ -582,7 +562,7 @@
             </div>
         </section>
 
-        <!-- 版本历史 (增加 v1.2.0 新特性) -->
+        <!-- 版本历史 -->
         <section id="versions" class="section">
             <div class="container">
                 <h2 class="section-title"><i class="fas fa-history"></i> 版本历程</h2>
@@ -602,7 +582,7 @@
                 <p style="margin-bottom: 1rem;">专有软件许可证 · 仅供授权使用</p>
                 <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
                     <a href="https://hz-lyxh.github.io/bloge/" class="btn btn-outline"><i class="fas fa-globe"></i> 公司官网</a>
-                    <a href="https://github.com/hz-lyxh/StarseaOS" class="btn btn-outline"><i class="fab fa-github"></i> GitHub</a>
+                    <a href="https://github.com/hz-lyxh/starsea-os" class="btn btn-outline"><i class="fab fa-github"></i> GitHub</a>
                     <a href="mailto:lzc737507@outlook.com" class="btn btn-outline"><i class="fas fa-envelope"></i> 邮件联系</a>
                 </div>
             </div>
