@@ -1,7 +1,7 @@
 # 星海量子通用操作系统 - 项目文档
 
-**版本**：1.2.0  
-**发布日期**：2026-06-15  
+**版本**：2.0.0-beta.2  
+**发布日期**：2027-01-31  
 **开发者**：蓝域星河有限公司集团  
 
 ---
@@ -11,12 +11,10 @@
 星海量子通用操作系统配置终端是一个多用户、多语言、高安全性的量子操作系统管理工具。  
 它提供了系统初始化、用户管理、终端命令交互、虚拟文件系统、应用/插件市场、定时任务、升级维护、安全审计等完整功能，并支持图形化/Web/命令行多种启动模式。
 
-v1.2.0 聚焦于**市场生态完善、部署自动化、用户体验打磨**，新增静默安装、远程市场列表、分类帮助、图形界面回退机制等核心特性。
-
-系统采用 **Fernet 加密** 保护所有配置文件，用户密码使用 SHA-256 加盐存储，系统密钥采用 bcrypt 验证并支持暴力锁定。  
+v2.0.0-beta.2 是 **2.0.0 系列的第二个测试版**，在 beta.1 的基础上新增了**强制市场签名验证、Web 面板 HTTPS 支持、API 限流、Redis 会话支持、类型注解标记、日志轮转优化、每周缓存清理**等企业级特性。系统采用 **Fernet 加密** 保护所有配置文件，用户密码使用 bcrypt 存储，系统密钥采用 bcrypt 验证并支持暴力锁定。  
 内置 **admin / user / developer** 三级权限体系，开发者拥有最高运维权限（需独立激活密钥）。
 
-> **安全提示**：产品密钥不再硬编码，首次启动通过环境变量 `STARSEA_PRODUCT_KEY` 或交互输入获取。
+> **安全提示**：产品密钥不再硬编码，首次启动通过环境变量 `STARSEA_PRODUCT_KEY` 或交互输入获取，启动后自动清除。
 
 ---
 
@@ -24,11 +22,13 @@ v1.2.0 聚焦于**市场生态完善、部署自动化、用户体验打磨**，
 
 ### 2.1 整体目录结构
 
-```
+```text
 星海量子操作系统/
 ├── 组件/                                   # 系统运行根目录
 │   ├── main.py                             # 统一启动器（7种模式）
 │   ├── install_wizard.py                   # 图形化/静默安装向导
+│   ├── install_wizard_ultimate.py          # 完整安装向导（PyQt5/Tkinter）
+│   ├── check_installation.py               # 安装完整性验证
 │   ├── requirements.txt                    # Python依赖
 │   ├── README.md                           # 项目说明
 │   ├── PROJECT.md                          # 项目文档（本文件）
@@ -45,7 +45,7 @@ v1.2.0 聚焦于**市场生态完善、部署自动化、用户体验打磨**，
 │   ├── 数据集/                             # 参考数据
 │   ├── 应用/                               # 官方应用安装目录（app install下载）
 │   ├── 插件/                               # 插件安装目录（pm install下载）
-│   └── system/                             # 核心系统模块（50+个Python模块）
+│   └── system/                             # 核心系统模块（70+个Python模块）
 │       ├── __init__.py
 │       ├── config.py                       # 全局常量、8语言包、密钥哈希
 │       ├── utils.py                        # 加密、文件操作、用户管理
@@ -56,9 +56,9 @@ v1.2.0 聚焦于**市场生态完善、部署自动化、用户体验打磨**，
 │       ├── user_manager.py                 # 管理员用户管理子菜单
 │       ├── upgrade.py                      # 本地版本迁移
 │       ├── github_updater.py               # GitHub Release自动更新
-│       ├── system_monitor.py               # 系统资源监控
+│       ├── system_monitor.py               # 系统资源监控（高级图表）
 │       ├── scheduler.py                    # 定时任务调度器
-│       ├── virtual_fs.py                   # 虚拟文件系统
+│       ├── virtual_fs.py                   # 虚拟文件系统（支持多行读写）
 │       ├── script_engine.py                # .ssea脚本执行
 │       ├── report_generator.py             # HTML报告生成
 │       ├── diagnostics.py                  # 系统诊断工具
@@ -94,31 +94,46 @@ v1.2.0 聚焦于**市场生态完善、部署自动化、用户体验打磨**，
 │       ├── vfs_advanced.py                 # VFS权限扩展
 │       ├── broadcast.py                    # 消息广播
 │       ├── chart.py                        # ASCII资源图表
-│       ├── plugin_manager.py               # 插件管理器
-│       ├── plugin_market.py                # 插件市场（类型筛选、远程列表）
-│       ├── app_market.py                   # 应用市场（类型筛选、远程列表）
+│       ├── plugin_manager.py               # 插件管理器（支持热加载）
+│       ├── plugin_market.py                # 插件市场（基于公共模块）
+│       ├── app_market.py                   # 应用市场（基于公共模块）
+│       ├── market_common.py                # 市场公共基类（消除重复代码）
+│       ├── market_cache.db                 # SQLite市场缓存
 │       ├── app_registry.py                 # 应用注册表
-│       ├── web_server.py                   # Flask Web面板（无硬编码，监听0.0.0.0）
+│       ├── unified_logger.py               # 统一日志系统（结构化+审计分离）
+│       ├── web_server.py                   # Flask Web面板（WebSocket、多会话、暗色主题）
 │       ├── gui_launcher.py                 # 图形面板（PyQt5优先，Tkinter回退）
 │       ├── system_settings.py              # 系统设置独立模块
-│       ├── kernel_interface.py             # 内核信息抽象层
-│       ├── linux_kernel.py / windows_kernel.py / darwin_kernel.py
+│       ├── kernel_interface.py             # 内核信息抽象层（支持多平台）
+│       ├── linux_kernel.py                 # Linux内核信息获取（增强）
+│       ├── windows_kernel.py               # Windows内核信息获取（增强）
+│       ├── darwin_kernel.py                # macOS内核信息获取（增强）
+│       ├── android_kernel.py               # 安卓内核信息获取与原生功能适配
 │       ├── system_management.py            # 服务/软件包管理
-│       ├── ai_assistant.py                 # AI助手集成
-│       ├── microservice.py                 # 微服务通信
+│       ├── ai_assistant.py                 # AI助手集成（OpenAI/DeepSeek/通义千问）
+│       ├── microservice.py                 # 微服务通信（多节点部署）
 │       ├── crypto_upgrade.py               # 密钥轮换
 │       ├── config_watcher.py               # 配置热加载
 │       ├── rbac.py                         # 基于角色的权限控制
 │       └── tests/                          # 自动化测试
-│           ├── conftest.py
+│           ├── conftest.py                 # pytest配置与公共夹具
 │           ├── test_utils.py
 │           ├── test_config.py
 │           ├── test_user_management.py
 │           ├── test_encryption.py
 │           ├── test_terminal.py
+│           ├── test_terminal_commands.py
 │           ├── test_virtual_fs.py
 │           ├── test_restore_points.py
-│           └── test_diagnostics.py
+│           ├── test_diagnostics.py
+│           ├── test_plugin_manager.py
+│           ├── test_market_common.py
+│           ├── test_unified_logger.py
+│           ├── test_kernel_interface.py
+│           ├── test_android_kernel.py
+│           ├── test_plugin_hot_reload.py
+│           ├── test_microservice.py
+│           └── test_market_integration.py
 ├── sdk/                                    # 独立SDK包
 │   ├── setup.py
 │   └── starsea_sdk/
@@ -134,7 +149,8 @@ v1.2.0 聚焦于**市场生态完善、部署自动化、用户体验打磨**，
 │   ├── 05.压缩包/
 │   └── 06.其他/
 ├── LICENSE.txt                             # 专有软件许可证
-└── 项目文档.md                              # 本文件（PROJECT.md）
+├── 项目文档.md                              # 本文件（PROJECT.md）
+└── 密钥.txt（已删除，不再随源码分发）
 ```
 
 ### 2.2 核心模块依赖关系
@@ -143,60 +159,64 @@ v1.2.0 聚焦于**市场生态完善、部署自动化、用户体验打磨**，
 启动器 (main.py) 或 安装向导 (install_wizard.py)
     │
     ├─→ system.utils (加密、配置读写)
-    │       └─→ cryptography, bcrypt, json
+    │       └─→ cryptography, bcrypt, json, sqlite3
     ├─→ system.config (常量、语言包)
     ├─→ system.login_handler
     │       └─→ system.terminal (终端主循环)
     │               ├─→ system.virtual_fs
-    │               ├─→ system.plugin_manager
-    │               ├─→ system.plugin_market
-    │               ├─→ system.app_market
+    │               ├─→ system.plugin_manager (热加载)
+    │               ├─→ system.plugin_market (基于 market_common + SQLite)
+    │               ├─→ system.app_market (基于 market_common + SQLite)
     │               └─→ system.app_registry
     ├─→ system.gui_launcher (图形界面)
-    └─→ system.web_server (Web面板)
-            └─→ flask
+    ├─→ system.web_server (Web面板)
+    │       └─→ flask, flask_socketio, eventlet, flask_limiter, flask_session, redis
+    ├─→ system.ai_assistant (AI助手)
+    │       └─→ openai / dashscope / requests
+    └─→ system.microservice (多节点扩展)
+            └─→ zerorpc / redis
 ```
 
 ---
 
-## 三、v1.2.0 新增/强化功能
+## 三、v2.0.0-beta.2 新增功能
 
-### 3.1 应用/插件市场生态完善
-- **统一市场源**：`market_config.json` 同时用于插件和应用，通过 `type` 字段区分
-- **远程列表**：`pm list-remote` / `app list-remote` 直接查看仓库所有可用条目
-- **类型筛选**：插件市场仅显示 `type=plugin`，应用市场仅显示 `type=app`
-- **下载增强**：超时延长至 30 秒，支持 3 次自动重试，失败时使用本地缓存
+### ✨ 核心增强
 
-### 3.2 终端体验优化
-- **分类帮助**：`help` 按类别显示常用命令，`help <关键词>` 智能搜索相关命令
-- **命令补全**：支持 `pm` / `app` 所有子命令（`list-remote`, `search`, `install`, `update`, `refresh`, `list`, `uninstall`）
-- **安装提示**：应用安装成功后自动提示“请重启终端”，避免命令无法立即识别
+#### 3.1 强制市场签名验证
+- 配置 `MARKET_REQUIRE_SIGNATURE = True`，禁止安装未签名的插件/应用
+- 提升供应链安全，防止恶意代码注入
 
-### 3.3 图形界面现代化与回退机制
-- **双引擎支持**：优先使用 PyQt5（现代化界面），自动回退 Tkinter（无额外依赖）
-- **完整功能**：9 个标签页覆盖系统状态、用户管理、VFS、命令执行、市场、插件、备份、日志、设置
-- **多语言**：中英文界面实时切换
+#### 3.2 Web 面板 HTTPS 支持
+- 支持通过 `--ssl-cert` 和 `--ssl-key` 参数启用 HTTPS
+- 提供 `generate_self_signed_cert()` 函数生成自签名证书（开发测试用）
 
-### 3.4 安装向导升级
-- **图形化分步**：环境检查 → 目录准备 → 产品密钥 → 管理员账户 → 终端配置 → 执行安装
-- **静默模式**：`--unattended` 参数实现无人值守安装，适合批量部署
-- **安全回滚**：安装前自动备份现有配置，失败时完整恢复
+#### 3.3 API 请求限流
+- 基于 Flask-Limiter，默认限制 60 次/分钟
+- 防止暴力攻击和资源滥用
 
-### 3.5 Web 面板独立化与局域网访问
-- 移除外部 client 依赖，直接调用系统模块
-- 新增市场 API：`/api/market/plugins`、`/api/market/apps`
-- `/api/exec` 支持 `pm` / `app` 命令
-- **监听 `0.0.0.0`**，支持局域网内其他设备访问
+#### 3.4 Redis 会话支持（分布式部署）
+- 新增 `REDIS_URL` 和 `SESSION_TYPE` 配置
+- 为多节点部署提供会话共享能力
 
-### 3.6 启动器多模式
-- 7 种组合：仅CLI、仅UI、仅Web、CLI+UI、UI+Web、CLI+Web、全部
-- 通过环境变量 `STARSEA_PRODUCT_KEY` 传递产品密钥，彻底消除硬编码
+#### 3.5 补充单元测试
+- `test_plugin_hot_reload.py`：插件热加载测试
+- `test_microservice.py`：微服务基础测试
+- `test_market_integration.py`：市场签名验证测试
 
-### 3.7 安全与依赖
-- 所有脚本中产品密钥硬编码已清除
-- `init_handler.py` 自动检查 Python 版本和依赖包，缺失时提示安装命令
-- 首次运行自动创建必要目录和默认 `market_config.json`
-- 更新 `requirements.txt`，增加 `psutil`, `pyotp`, `paramiko`, `croniter`, `flask`, `PyQt5`, `pytest` 等依赖
+#### 3.6 类型注解标记
+- 添加 `py.typed` 标记文件，支持类型检查工具
+- 创建 `stubs/` 目录用于渐进式类型化
+
+#### 3.7 日志轮转优化
+- 确保日志按 10MB 自动轮转，保留最近 10 个备份
+
+#### 3.8 每周自动清理市场缓存
+- 调度器新增每周任务，自动清理超过 30 天的市场缓存
+
+### 📦 依赖更新
+- 新增依赖：`Flask-Limiter`, `Flask-Session`, `redis`, `pyOpenSSL`
+- 完整 `requirements.txt` 已更新
 
 ---
 
@@ -225,7 +245,7 @@ v1.2.0 聚焦于**市场生态完善、部署自动化、用户体验打磨**，
 
 ### 4.4 虚拟文件系统（VFS）
 - 支持创建/删除目录和文件
-- 支持读写文件内容
+- 支持读写文件内容（`vwrite` 支持多行交互式输入）
 - 支持权限（`vchmod`）和属主（`vchown`）设置
 - 支持软链接（`vln`）
 - 多会话间相互隔离
@@ -234,16 +254,16 @@ v1.2.0 聚焦于**市场生态完善、部署自动化、用户体验打磨**，
 - **插件市场**：`pm search`、`pm install`、`pm update`、`pm list-remote`、`pm refresh`
 - **应用市场**：`app search`、`app install`、`app update`、`app list-remote`、`app uninstall`
 - 安装的应用注册为终端命令，安装后需重启终端
-- 插件通过 `plugin run` 执行
+- 插件通过 `plugin run` 执行，支持热加载
 
 ### 4.6 安全机制
 - 配置文件全程加密（AES-128 CBC + HMAC）
 - 系统密钥 bcrypt 验证，错误 5 次锁定 15 分钟
-- 用户密码 SHA-256 哈希存储，支持密码策略强制
+- 用户密码 bcrypt 哈希存储（自 2.0.0-beta.1 起不再兼容 SHA256）
 - 双因素认证（TOTP）可选
 - 硬件绑定许可证（可选）
 - 安全审计日志记录所有敏感操作
-- **产品密钥零硬编码**（v1.2.0 新增）
+- 产品密钥零硬编码
 
 ### 4.7 升级与维护
 - 本地版本迁移（`upgrade` 命令）
@@ -252,10 +272,11 @@ v1.2.0 聚焦于**市场生态完善、部署自动化、用户体验打磨**，
 - 文件完整性检查、临时文件清理、虚拟文件系统修复
 - 自动备份（每 10 分钟）与定时报告（每小时）
 - 自愈守护进程（监控调度器、日志自动压缩）
+- 市场缓存 SQLite 自动清理与优化（每周）
 
 ### 4.8 扩展性
-- 插件系统：`plugins/` 目录下的 Python 模块可通过 `plugin` 命令动态加载和执行
-- 脚本引擎：支持执行 `.ssea` 批处理脚本
+- 插件系统：`plugins/` 目录下的 Python 模块可通过 `plugin` 命令动态加载和执行（支持热加载，严格隔离）
+- 脚本引擎：支持执行 `.ssea` 批处理脚本（严格白名单）
 - Cron 任务：支持标准 cron 表达式添加定时任务
 - 独立 SDK：提供 `starsea_sdk` 包，外部程序可直接调用系统 API
 
@@ -288,7 +309,16 @@ python install_wizard.py --unattended \
     --term-index "A"
 ```
 
-### 5.4 启动系统
+### 5.4 从旧版本升级（重要）
+> **注意**：从 2.0.0-beta.1 升级到 2.0.0-beta.2 不包含破坏性变更，只需覆盖安装并安装新增依赖。
+
+1. **备份现有配置**：将 `组件/config/` 目录下的 `.lyxh.enc` 配置文件及 `市场缓存.db`（如有）复制到安全位置。
+2. **下载 2.0.0-beta.2 完整包**并解压。
+3. **覆盖安装**：将解压后的 `组件/` 目录覆盖到原安装目录（保留您自己的 `应用/`、`插件/` 目录及备份的配置文件）。
+4. **更新依赖**：进入 `组件/` 目录执行 `pip install -r requirements.txt --upgrade`。
+5. **验证升级**：运行 `python main.py` 测试各项功能。
+
+### 5.5 启动系统
 ```bash
 python main.py
 ```
@@ -318,13 +348,15 @@ python main.py
 |------|------|------|
 | 系统 | `status`, `sysinfo`, `monitor` | 查看状态信息 |
 | 文件 | `ls`, `cat`, `cd` | 真实文件操作 |
-| VFS | `vls`, `vcd`, `vread`, `vwrite` | 虚拟文件系统 |
+| VFS | `vls`, `vcd`, `vread`, `vwrite` | 虚拟文件系统（vwrite 多行输入） |
 | 用户 | `users`, `useradd`, `userdel` | 用户管理（管理员） |
 | 备份 | `backup`, `restore`, `create_rp` | 备份与还原 |
 | 市场 | `pm list-remote`, `app list-remote` | 查看远程插件/应用 |
 | 市场 | `pm install <id>`, `app install <id>` | 安装 |
-| 插件 | `plugin run <id>` | 运行插件 |
+| 插件 | `plugin run <id>` | 运行插件（支持热加载） |
+| AI | `ai <问题>`, `ai diagnose` | AI 助手（需配置） |
 | 帮助 | `help`, `help <关键词>` | 分类帮助 |
+| 安卓 | `android battery`/`apps`/`launch`/`wifi`/`info` | 安卓专用命令（仅安卓环境） |
 
 ### 6.3 图形界面操作
 - 启动 `python main.py` → 选择 `2`
@@ -335,7 +367,14 @@ python main.py
 - 启动 `python main.py` → 选择 `3`
 - 本机访问 `http://127.0.0.1:5000`
 - 局域网其他设备访问 `http://<本机IP>:5000`
-- 支持 API 调用：`/api/status`, `/api/users`, `/api/market/plugins`, `/api/exec` 等
+- 支持 WebSocket 实时日志（需浏览器支持）
+- API 调用：`/api/status`, `/api/users`, `/api/market/plugins`, `/api/exec` 等（需携带 CSRF Token）
+- 可选启用 HTTPS 和 API 限流
+
+### 6.5 AI 助手使用
+- 在 `system/config.py` 中配置 `AI_PROVIDER`（openai / deepseek / qwen）和 `AI_API_KEY`
+- 终端中输入 `ai "如何优化系统性能？"` 获取建议
+- 自动诊断：`ai diagnose` 自动收集系统状态并生成报告
 
 ---
 
@@ -372,7 +411,8 @@ python main.py
       "desc": "描述",
       "type": "app",
       "command": "app_command",
-      "file": "app_id.py"
+      "file": "app_id.py",
+      "signature": "sha256"
     }
   }
 }
@@ -385,8 +425,8 @@ python main.py
 
 ## 八、开发与扩展
 
-### 8.1 插件开发
-插件需实现 `run(args, lang, lang_code, current_user)` 函数，放入 `plugins/` 目录。
+### 8.1 插件开发（支持热加载，严格隔离）
+插件需实现 `run(args, lang, lang_code, current_user)` 函数，放入 `plugins/` 目录。修改后自动生效，无需重启终端。**注意：本版本起插件禁止导入任何 `system` 内部模块**，请使用标准 Python 库或独立 SDK。
 
 示例 `hello.py`：
 ```python
@@ -397,7 +437,7 @@ def run(args, lang, lang_code, current_user):
 运行：`plugin run hello [name]`
 
 ### 8.2 应用开发
-应用安装后会自动注册为终端命令，需在远程仓库 JSON 中声明 `type: "app"` 和 `command` 字段。
+应用安装后会自动注册为终端命令，需在远程仓库 JSON 中声明 `type: "app"` 和 `command` 字段，并包含有效的 SHA256 签名。
 
 ### 8.3 使用 SDK
 ```python
@@ -409,9 +449,11 @@ users = client.get_users("system_config_zh.lyxh.enc")
 ### 8.4 自动化测试
 ```bash
 cd 组件
-pytest tests/ -v
+python run_tests.py
+# 或
+pytest system/tests/ -v
 ```
-测试覆盖：工具函数、配置常量、用户管理、加密解密、终端命令、VFS、还原点、诊断。
+测试覆盖：工具函数、配置常量、用户管理、加密解密、终端命令、VFS、还原点、诊断、市场公共模块、统一日志、内核信息、安卓适配、插件热加载、微服务、市场签名验证。
 
 ---
 
@@ -443,6 +485,15 @@ A: 确保防火墙允许 5000 端口，启动 Web 面板后使用本机局域网
 
 **Q: 为什么 Web 面板监听 `0.0.0.0` 后无法用 `0.0.0.0:5000` 访问？**  
 A: `0.0.0.0` 是监听地址，不是访问地址。请使用本机 IP 或 `127.0.0.1` 访问。
+
+**Q: `vwrite` 如何输入多行内容？**  
+A: 使用 `vwrite 文件名`（不提供内容参数），然后逐行输入文本，最后输入一个空行结束。
+
+**Q: AI 助手无法使用？**  
+A: 检查 `system/config.py` 中是否正确配置了 `AI_PROVIDER` 和 `AI_API_KEY`，并确认网络可访问对应 API。
+
+**Q: 如何从 2.0.0-beta.1 升级到 2.0.0-beta.2？**  
+A: 请参考第五章“5.4 从旧版本升级”中的覆盖安装步骤，并执行 `pip install -r requirements.txt --upgrade` 安装新增依赖。
 
 ---
 
