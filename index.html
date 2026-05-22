@@ -3,17 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>星海量子操作系统 · StarseaOS | 企业级安全终端</title>
-    <meta name="description" content="星海量子通用操作系统 —— 多用户、多语言、高安全量子终端配置平台，集成应用/插件市场、虚拟文件系统、双因素认证等企业级特性">
+    <title>星海量子操作系统 · StarseaOS | 安全 · 智能 · 企业级量子终端</title>
+    <meta name="description" content="星海量子通用操作系统 —— 多用户、多语言、高安全量子终端配置平台，集成应用/插件市场、虚拟文件系统、双因素认证、API限流、HTTPS 等企业级特性。">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-primary);
@@ -21,8 +16,6 @@
             transition: background 0.3s, color 0.2s;
             scroll-behavior: smooth;
         }
-
-        /* 全局变量 */
         :root {
             --bg-primary: #ffffff;
             --bg-secondary: #f8fafc;
@@ -38,16 +31,9 @@
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
             --gradient-primary: linear-gradient(135deg, #06b6d4, #3b82f6);
-            --gradient-dark: linear-gradient(135deg, #0f172a, #1e293b);
-            --radius-sm: 0.5rem;
-            --radius-md: 1rem;
             --radius-lg: 1.5rem;
-            --radius-xl: 2rem;
         }
-
-        /* 暗色模式 */
         body.dark {
             --bg-primary: #0f172a;
             --bg-secondary: #1e293b;
@@ -57,8 +43,6 @@
             --text-muted: #94a3b8;
             --border: #334155;
         }
-
-        /* 紫罗兰主题变量（动态切换） */
         body.theme-violet {
             --primary: #a855f7;
             --primary-dark: #9333ea;
@@ -66,7 +50,6 @@
             --secondary: #e879f9;
             --gradient-primary: linear-gradient(135deg, #a855f7, #e879f9);
         }
-
         body.theme-mint {
             --primary: #34d399;
             --primary-dark: #10b981;
@@ -74,7 +57,6 @@
             --secondary: #6ee7b7;
             --gradient-primary: linear-gradient(135deg, #34d399, #10b981);
         }
-
         body.theme-sunset {
             --primary: #fb923c;
             --primary-dark: #f97316;
@@ -82,7 +64,6 @@
             --secondary: #fed7aa;
             --gradient-primary: linear-gradient(135deg, #fb923c, #f97316);
         }
-
         body.theme-sakura {
             --primary: #f472b6;
             --primary-dark: #ec4899;
@@ -90,368 +71,143 @@
             --secondary: #fbcfe8;
             --gradient-primary: linear-gradient(135deg, #f472b6, #ec4899);
         }
-
-        /* 容器 */
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        /* 玻璃导航栏 */
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
         .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 50;
+            position: sticky; top: 0; z-index: 50;
             backdrop-filter: blur(12px);
             background: rgba(255, 255, 255, 0.8);
             border-bottom: 1px solid var(--border);
-            transition: background 0.2s;
         }
-        body.dark .navbar {
-            background: rgba(15, 23, 42, 0.8);
-        }
+        body.dark .navbar { background: rgba(15, 23, 42, 0.8); }
         .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-            flex-wrap: wrap;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 0; flex-wrap: wrap;
         }
         .logo {
-            font-size: 1.6rem;
-            font-weight: 800;
+            font-size: 1.6rem; font-weight: 800;
             background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.02em;
+            -webkit-background-clip: text; background-clip: text; color: transparent;
         }
-        .logo span {
-            background: none;
-            -webkit-background-clip: unset;
-            background-clip: unset;
-            color: var(--primary);
-        }
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-primary);
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-        .theme-buttons {
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-        }
+        .logo i { margin-right: 0.25rem; }
+        .nav-links { display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; }
+        .nav-links a { text-decoration: none; color: var(--text-primary); font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--primary); }
+        .theme-buttons { display: flex; gap: 0.75rem; }
         .icon-btn {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 2rem;
-            padding: 0.5rem 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-primary);
-            font-size: 1rem;
+            background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 2rem;
+            padding: 0.5rem 0.9rem; cursor: pointer; transition: all 0.2s;
+            color: var(--text-primary); font-size: 1rem;
         }
-        .icon-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-        .mobile-menu {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-primary);
-        }
-
+        .icon-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .mobile-menu { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); }
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                width: 100%;
-                flex-direction: column;
-                gap: 1rem;
-                padding: 1rem 0;
-            }
-            .nav-links.show {
-                display: flex;
-            }
-            .mobile-menu {
-                display: block;
-            }
-            .theme-buttons {
-                order: 2;
-            }
+            .nav-links { display: none; width: 100%; flex-direction: column; gap: 1rem; padding: 1rem 0; }
+            .nav-links.show { display: flex; }
+            .mobile-menu { display: block; }
+            .theme-buttons { order: 2; }
         }
-
-        /* 按钮 */
         .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            border-radius: 2rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s;
-            border: none;
-            cursor: pointer;
+            display: inline-block; padding: 0.75rem 1.5rem; border-radius: 2rem;
+            font-weight: 600; text-decoration: none; transition: all 0.2s;
+            border: none; cursor: pointer;
         }
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            box-shadow: var(--shadow-sm);
-        }
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        .btn-outline {
-            border: 1px solid var(--border);
-            background: transparent;
-            color: var(--text-primary);
-        }
-        .btn-outline:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        /* 标题区 */
-        .hero {
-            padding: 4rem 0 5rem;
-            text-align: center;
-        }
+        .btn-primary { background: var(--primary); color: white; box-shadow: var(--shadow-sm); }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-outline { border: 1px solid var(--border); background: transparent; color: var(--text-primary); }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+        .hero { padding: 4rem 0 5rem; text-align: center; }
         .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1.2;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 1rem;
+            font-size: 3.5rem; font-weight: 800;
+            background: var(--gradient-primary); -webkit-background-clip: text; background-clip: text;
+            color: transparent; margin-bottom: 1rem;
         }
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            max-width: 700px;
-            margin: 0 auto 2rem;
-        }
+        .hero p { font-size: 1.2rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto 2rem; }
         .hero-badge {
-            display: inline-block;
-            background: var(--bg-secondary);
-            border-radius: 2rem;
-            padding: 0.3rem 1rem;
-            font-size: 0.85rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            border: 1px solid var(--border);
+            display: inline-block; background: var(--bg-secondary); border-radius: 2rem;
+            padding: 0.3rem 1rem; font-size: 0.85rem; color: var(--primary);
+            margin-bottom: 1.5rem; border: 1px solid var(--border);
         }
-
-        /* 统计卡片 */
-        .stats-grid {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin: 3rem 0;
-        }
+        .stats-grid { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin: 3rem 0; }
         .stat-card {
-            background: var(--bg-card);
-            padding: 1.5rem 2rem;
-            border-radius: var(--radius-lg);
-            text-align: center;
-            min-width: 140px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-sm);
+            background: var(--bg-card); padding: 1.5rem 2rem; border-radius: var(--radius-lg);
+            text-align: center; border: 1px solid var(--border); backdrop-filter: blur(4px);
         }
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
-        /* 通用区块 */
-        .section {
-            padding: 4rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        .section-title i {
-            color: var(--primary);
-            margin-right: 0.5rem;
-        }
-
-        /* 卡片网格 */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
+        .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--primary); }
+        .section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+        .section-title { font-size: 2rem; font-weight: 700; margin-bottom: 2rem; text-align: center; }
+        .section-title i { color: var(--primary); margin-right: 0.5rem; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
         .feature-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 1.8rem;
-            transition: all 0.3s;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-sm);
+            background: var(--bg-card); border-radius: var(--radius-lg); padding: 1.8rem;
+            transition: all 0.3s; border: 1px solid var(--border);
         }
-        .feature-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--primary-light);
-            box-shadow: var(--shadow-lg);
-        }
-        .feature-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-        .feature-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-        .feature-card p {
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-        .new-tag {
-            background: var(--primary);
-            color: white;
-            font-size: 0.7rem;
-            padding: 0.2rem 0.7rem;
-            border-radius: 1rem;
-            margin-left: 0.5rem;
-            vertical-align: middle;
-        }
-
-        /* 架构预展示 */
-        .arch-preview {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            overflow-x: auto;
-            font-family: monospace;
-            font-size: 0.85rem;
-            border: 1px solid var(--border);
-        }
-        .arch-preview pre {
-            margin: 0;
-            color: var(--text-primary);
-        }
-
-        /* 安装步骤 */
-        .steps-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .step {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-        }
-        .step-number {
-            background: var(--primary);
-            color: white;
-            width: 2rem;
-            height: 2rem;
-            border-radius: 2rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        .step-content {
-            flex: 1;
-        }
-        .code-block {
-            background: var(--bg-primary);
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius-md);
-            font-family: monospace;
-            font-size: 0.9rem;
-            border: 1px solid var(--border);
-            margin-top: 0.5rem;
-        }
-
-        /* 版本时间线 */
-        .timeline {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
+        .feature-card:hover { transform: translateY(-5px); border-color: var(--primary-light); box-shadow: var(--shadow-md); }
+        .feature-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
+        .feature-card h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .new-tag { background: var(--primary); color: white; font-size: 0.7rem; padding: 0.2rem 0.7rem; border-radius: 1rem; margin-left: 0.5rem; vertical-align: middle; }
+        .arch-preview { background: var(--bg-secondary); border-radius: var(--radius-lg); padding: 1.5rem; overflow-x: auto; font-family: monospace; font-size: 0.85rem; border: 1px solid var(--border); }
+        .steps-container { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
+        .step { display: flex; gap: 1rem; }
+        .step-number { background: var(--primary); color: white; width: 2rem; height: 2rem; border-radius: 2rem; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+        .code-block { background: var(--bg-primary); padding: 0.5rem 1rem; border-radius: 1rem; font-family: monospace; border: 1px solid var(--border); margin-top: 0.5rem; }
+        .timeline { display: flex; flex-direction: column; gap: 1.5rem; }
         .timeline-item {
-            display: flex;
-            gap: 1.5rem;
-            border-left: 2px solid var(--primary);
-            padding-left: 1.5rem;
-            position: relative;
+            display: flex; gap: 1.5rem; border-left: 2px solid var(--primary); padding-left: 1.5rem;
+            cursor: pointer; transition: background 0.2s; border-radius: 0.5rem;
         }
-        .timeline-date {
-            font-weight: 600;
-            color: var(--primary);
-            min-width: 100px;
+        .timeline-item:hover { background: var(--bg-secondary); }
+        .timeline-date { font-weight: 600; color: var(--primary); min-width: 100px; }
+        .timeline-version { font-weight: 700; }
+        .click-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; text-align: center; margin-bottom: 1rem; }
+        .spec-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;
+            margin-top: 1.5rem;
         }
-
-        /* 页脚 */
-        footer {
-            background: var(--bg-secondary);
-            padding: 2.5rem 0;
-            text-align: center;
-            border-top: 1px solid var(--border);
+        .spec-card {
+            background: var(--bg-card); border-radius: var(--radius-lg); padding: 1.2rem;
+            border: 1px solid var(--border);
         }
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
+        .spec-card h4 { margin-bottom: 0.75rem; color: var(--primary); }
+        .spec-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .spec-table td, .spec-table th { padding: 0.4rem; border-bottom: 1px solid var(--border); text-align: left; }
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); z-index: 1000; justify-content: center; align-items: center;
+            backdrop-filter: blur(4px);
         }
-        .footer-links a {
-            color: var(--text-muted);
-            text-decoration: none;
+        .modal-content {
+            background: var(--bg-card); border-radius: var(--radius-lg); max-width: 750px; width: 90%;
+            max-height: 80vh; overflow-y: auto; padding: 1.8rem; position: relative;
+            border: 1px solid var(--border); box-shadow: var(--shadow-lg);
         }
-        .footer-links a:hover {
-            color: var(--primary);
-        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; margin-bottom: 1.25rem; }
+        .modal-header h3 { font-size: 1.5rem; color: var(--primary); }
+        .modal-close { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--text-muted); }
+        .modal-close:hover { color: var(--primary); }
+        .modal-body { font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+        .modal-body ul { margin-left: 1.5rem; margin-top: 0.5rem; }
+        .modal-body li { margin-bottom: 0.5rem; }
+        .badge-breaking { background: #ef4444; color: white; font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 1rem; margin-left: 0.5rem; vertical-align: middle; }
+        footer { background: var(--bg-secondary); padding: 2.5rem 0; text-align: center; border-top: 1px solid var(--border); }
+        .footer-links { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; }
+        .footer-links a:hover { color: var(--primary); }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="container nav-container">
-            <div class="logo">
-                <i class="fas fa-atom"></i> 星海量子<span>OS</span>
-            </div>
+            <div class="logo"><i class="fas fa-atom"></i> 星海量子<span style="background: none;">OS</span></div>
             <button class="mobile-menu" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
             <div class="nav-links" id="navLinks">
-                <a href="#overview">概览</a>
-                <a href="#features">特性</a>
-                <a href="#architecture">架构</a>
-                <a href="#install">安装</a>
-                <a href="#versions">版本</a>
-                <a href="#contact">联系</a>
+                <a href="#overview">概览</a> <a href="#features">特性</a> <a href="#architecture">架构</a>
+                <a href="#install">安装</a> <a href="#versions">版本</a> <a href="#spec">版本规范</a> <a href="#contact">联系</a>
             </div>
             <div class="theme-buttons">
                 <button class="icon-btn" id="themeToggle" title="深色模式"><i class="fas fa-moon"></i></button>
-                <div class="theme-palette" style="position: relative;">
+                <div style="position: relative;">
                     <button class="icon-btn" id="paletteBtn"><i class="fas fa-palette"></i></button>
-                    <div id="paletteDropdown" class="theme-dropdown" style="display: none; position: absolute; right: 0; top: 2.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 1rem; padding: 0.5rem; z-index: 100; width: 150px;">
+                    <div id="paletteDropdown" style="display: none; position: absolute; right: 0; top: 2.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 1rem; padding: 0.5rem; z-index: 100; width: 150px;">
                         <div data-theme="cyan" class="theme-opt" style="padding: 0.5rem; cursor: pointer;">🌊 青蓝</div>
                         <div data-theme="violet" class="theme-opt" style="padding: 0.5rem; cursor: pointer;">🪻 紫罗兰</div>
                         <div data-theme="mint" class="theme-opt" style="padding: 0.5rem; cursor: pointer;">🌿 薄荷绿</div>
@@ -464,172 +220,174 @@
     </nav>
 
     <main>
-        <!-- Hero 区域 -->
         <section class="hero">
             <div class="container">
-                <div class="hero-badge">
-                    <i class="fas fa-crown"></i> v1.2.0 · 市场生态完善
-                </div>
+                <div class="hero-badge"><i class="fas fa-rocket"></i> 最新稳定版 v2.0.0-beta.2 · 企业级安全加固</div>
                 <h1>星海量子通用操作系统</h1>
-                <p>企业级量子终端配置平台 · 多用户、多语言、高安全 · 内置应用/插件市场</p>
-                <div>
-                    <a href="#install" class="btn btn-primary">快速开始</a>
-                    <a href="https://hz-lyxh.github.io/starsea-os/" class="btn btn-outline" style="margin-left: 1rem;">GitHub <i class="fab fa-github"></i></a>
-                </div>
+                <p>多用户 · 多语言 · 高安全 · 内置应用/插件市场 · 全栈运维终端</p>
+                <div><a href="#install" class="btn btn-primary">快速开始</a><a href="https://hz-lyxh.github.io/starsea-os/" class="btn btn-outline" style="margin-left: 1rem;">GitHub <i class="fab fa-github"></i></a></div>
             </div>
         </section>
 
-        <!-- 统计卡片 -->
         <div class="container stats-grid">
-            <div class="stat-card"><div class="stat-number">50+</div><div>核心模块</div></div>
+            <div class="stat-card"><div class="stat-number">70+</div><div>核心模块</div></div>
             <div class="stat-card"><div class="stat-number">8</div><div>多语言支持</div></div>
             <div class="stat-card"><div class="stat-number">80+</div><div>终端命令</div></div>
             <div class="stat-card"><div class="stat-number">企业级</div><div>安全等级</div></div>
         </div>
 
-        <!-- 概览卡片区 -->
-        <section id="overview" class="section">
-            <div class="container">
-                <div class="card-grid">
-                    <div class="feature-card"><i class="fas fa-user-shield feature-icon"></i><h3>三级权限体系</h3><p>user / admin / developer，开发者需独立激活密钥，权限分层清晰。</p></div>
-                    <div class="feature-card"><i class="fas fa-lock feature-icon"></i><h3>全态加密</h3><p>Fernet AES-128 CBC + HMAC 加密配置文件，密钥 bcrypt 哈希存储。</p></div>
-                    <div class="feature-card"><i class="fas fa-language feature-icon"></i><h3>8 语言界面</h3><p>中文、English、日本語、Français、Deutsch、Español、Русский、العربية。</p></div>
-                    <div class="feature-card"><i class="fas fa-cloud-upload-alt feature-icon"></i><h3>远程升级</h3><p>GitHub Release 自动检测更新，支持一键升级迁移。</p></div>
-                </div>
-            </div>
-        </section>
+        <section id="overview" class="section"><div class="container"><div class="card-grid">
+            <div class="feature-card"><i class="fas fa-user-shield feature-icon"></i><h3>三级权限体系</h3><p>user / admin / developer，开发者需独立密钥，权限精细化控制。</p></div>
+            <div class="feature-card"><i class="fas fa-lock feature-icon"></i><h3>全态加密存储</h3><p>Fernet AES-128 CBC + HMAC 加密配置，bcrypt 密钥验证，防暴力破解。</p></div>
+            <div class="feature-card"><i class="fas fa-language feature-icon"></i><h3>8 语言界面</h3><p>中文、English、日本語、Français、Deutsch、Español、Русский、العربية。</p></div>
+            <div class="feature-card"><i class="fas fa-cloud-upload-alt feature-icon"></i><h3>远程升级</h3><p>GitHub Release 自动更新，一键迁移，支持离线升级包。</p></div>
+        </div></div></section>
 
-        <!-- 详细功能特性 -->
-        <section id="features" class="section">
-            <div class="container">
-                <h2 class="section-title"><i class="fas fa-star"></i> 核心功能特性</h2>
-                <div class="card-grid">
-                    <div class="feature-card"><i class="fas fa-terminal feature-icon"></i><h3>量子终端</h3><p>80+ 内置命令，Tab 补全，历史记录，别名，收藏夹，多会话隔离。</p></div>
-                    <div class="feature-card"><i class="fas fa-folder-tree feature-icon"></i><h3>虚拟文件系统</h3><p>独立于真实磁盘，支持目录、文件、权限控制、软链接，永久化存储。</p></div>
-                    <div class="feature-card"><i class="fas fa-clock feature-icon"></i><h3>定时任务与守护</h3><p>内置调度器 (10分钟备份，1小时报告)，支持 Cron 表达式，自愈守护。</p></div>
-                    <div class="feature-card"><i class="fas fa-palette feature-icon"></i><h3>多色彩主题</h3><p>7 种 ANSI 终端配色。</p></div>
-                    <div class="feature-card"><i class="fas fa-plug feature-icon"></i><h3>插件系统 + 市场 <span class="new-tag">v1.2.0</span></h3><p>动态加载 .py 插件，`pm` 命令支持搜索、安装、远程列表。</p></div>
-                    <div class="feature-card"><i class="fas fa-shopping-cart feature-icon"></i><h3>应用商店 <span class="new-tag">v1.2.0</span></h3><p>`app` 命令安装官方应用（文件管理器、计算器、词典等），一键注册为终端命令。</p></div>
-                    <div class="feature-card"><i class="fas fa-shield-virus feature-icon"></i><h3>安全审计与双因素</h3><p>审计日志 + TOTP 动态验证，可选硬件绑定许可证。</p></div>
-                    <div class="feature-card"><i class="fas fa-network-wired feature-icon"></i><h3>网络工具集</h3><p>ping, traceroute, SCP 加密传输, 邮件通知, 微服务抽象。</p></div>
-                    <div class="feature-card"><i class="fas fa-chart-line feature-icon"></i><h3>系统监控与诊断</h3><p>CPU/内存监控，进程管理，磁盘使用统计，一键生成诊断报告。</p></div>
-                    <div class="feature-card"><i class="fas fa-puzzle-piece feature-icon"></i><h3>独立 SDK</h3><p>提供 starsea_sdk 包，外部程序可调用用户管理、VFS、加密接口。</p></div>
-                </div>
+        <section id="features" class="section"><div class="container">
+            <h2 class="section-title"><i class="fas fa-star"></i> 核心功能特性</h2>
+            <div class="card-grid">
+                <div class="feature-card"><i class="fas fa-terminal feature-icon"></i><h3>量子终端</h3><p>80+ 内置命令，Tab 补全，别名，多会话隔离，7 种 ANSI 主题。</p></div>
+                <div class="feature-card"><i class="fas fa-folder-tree feature-icon"></i><h3>虚拟文件系统</h3><p>独立于物理磁盘，权限控制、软链接，持久化存储。</p></div>
+                <div class="feature-card"><i class="fas fa-clock feature-icon"></i><h3>调度与自愈</h3><p>内置定时器（10分钟备份，每小时报告），支持 Cron 表达式，守护进程自动恢复。</p></div>
+                <div class="feature-card"><i class="fas fa-plug feature-icon"></i><h3>插件市场 + 热加载</h3><p>动态加载 Python 插件，`pm` 命令支持搜索/安装/远程仓库，修改即生效。</p></div>
+                <div class="feature-card"><i class="fas fa-shopping-cart feature-icon"></i><h3>应用商店</h3><p>`app` 命令一键安装官方应用（文件管理器、计算器、词典等），自动注册为终端命令。</p></div>
+                <div class="feature-card"><i class="fas fa-shield-virus feature-icon"></i><h3>安全审计 + 2FA</h3><p>审计日志，TOTP 动态验证，可选硬件绑定许可证。</p></div>
+                <div class="feature-card"><i class="fas fa-https feature-icon"></i><h3>HTTPS + API 限流 <span class="new-tag">v2.0.0</span></h3><p>Web 面板支持 SSL/TLS，API 请求限流 (60/min)，防 CC 攻击。</p></div>
+                <div class="feature-card"><i class="fas fa-database feature-icon"></i><h3>Redis 会话支持</h3><p>分布式会话管理，多节点部署无缝扩展。</p></div>
+                <div class="feature-card"><i class="fas fa-chart-line feature-icon"></i><h3>监控与诊断</h3><p>CPU/内存/磁盘实时监控，历史图表，一键生成诊断报告。</p></div>
+                <div class="feature-card"><i class="fas fa-puzzle-piece feature-icon"></i><h3>独立 SDK</h3><p>提供 `starsea_sdk` 包，外部程序可调用用户管理、VFS、加密接口。</p></div>
             </div>
-        </section>
+        </div></section>
 
-        <!-- 架构展示 -->
-        <section id="architecture" class="section">
-            <div class="container">
-                <h2 class="section-title"><i class="fas fa-sitemap"></i> 系统架构</h2>
-                <div class="arch-preview">
-                    <pre>
-星海量子操作系统/
+        <section id="architecture" class="section"><div class="container">
+            <h2 class="section-title"><i class="fas fa-sitemap"></i> 系统架构</h2>
+            <div class="arch-preview"><pre>
+星海量子操作系统 v2.0.0-beta.2
 ├── 组件/                     # 运行根目录
-│   ├── main.py               # 统一启动器 (7种模式 CLI/UI/Web)
+│   ├── main.py               # 统一启动器 (CLI/UI/Web)
 │   ├── install_wizard.py     # 图形化/静默安装向导
-│   ├── requirements.txt
+│   ├── requirements.txt      # 依赖 (含 Flask-Limiter, Redis, pyOpenSSL)
 │   ├── system/
-│   │   ├── config.py         # 多语言配置，密钥哈希
-│   │   ├── utils.py          # 加密/解密，用户管理
+│   │   ├── config.py         # 多语言配置，密钥哈希，签名策略
+│   │   ├── utils.py          # 加密/解密，bcrypt 强哈希
 │   │   ├── terminal.py       # 终端核心 (pm, app, help 分类)
-│   │   ├── plugin_market.py  # 插件市场
-│   │   ├── app_market.py     # 应用市场
-│   │   ├── web_server.py     # Flask Web 面板 (0.0.0.0)
-│   │   ├── gui_launcher.py   # PyQt5/Tkinter 图形面板
-│   │   └── ... (50+ 模块)
+│   │   ├── plugin_market.py  # 插件市场 (SQLite 缓存)
+│   │   ├── app_market.py     # 应用市场 (签名强制验证)
+│   │   ├── web_server.py     # Flask Web 面板 (HTTPS, 限流)
+│   │   ├── gui_launcher.py   # PyQt5 / Tkinter 图形面板
+│   │   └── ... (70+ 模块)
 │   ├── 关于/  数据集/  示例文档/
 │   └── 应用/  插件/           # 安装目录
-└── G_D_*_数据储存库/          # 用户数据仓库
-                    </pre>
-                </div>
-            </div>
-        </section>
+└── G_D_*_数据储存库/          # 用户数据仓库 (可自定义)
+            </pre></div>
+        </div></section>
 
-        <!-- 安装与运行 -->
-        <section id="install" class="section">
-            <div class="container">
-                <h2 class="section-title"><i class="fas fa-download"></i> 快速安装</h2>
-                <div class="steps-container">
-                    <div class="step"><div class="step-number">1</div><div class="step-content"><strong>环境要求</strong><div class="code-block">Python 3.8+</div></div></div>
-                    <div class="step"><div class="step-number">2</div><div class="step-content"><strong>安装依赖</strong><div class="code-block">pip install -r requirements.txt</div></div></div>
-                    <div class="step"><div class="step-number">3</div><div class="step-content"><strong>图形化安装向导 (推荐)</strong><div class="code-block">python install_wizard.py</div></div></div>
-                    <div class="step"><div class="step-number">4</div><div class="step-content"><strong>启动系统</strong><div class="code-block">python main.py  # 选择 1/2/3 进入不同模式</div></div></div>
-                </div>
-                <div style="text-align: center; margin-top: 2rem;">
-                    <span class="hero-badge">💡 静默安装: python install_wizard.py --unattended --product-key ...</span>
-                </div>
+        <section id="install" class="section"><div class="container">
+            <h2 class="section-title"><i class="fas fa-download"></i> 快速安装</h2>
+            <div class="steps-container">
+                <div class="step"><div class="step-number">1</div><div class="step-content"><strong>环境要求</strong><div class="code-block">Python 3.8+</div></div></div>
+                <div class="step"><div class="step-number">2</div><div class="step-content"><strong>安装依赖</strong><div class="code-block">pip install -r requirements.txt</div></div></div>
+                <div class="step"><div class="step-number">3</div><div class="step-content"><strong>图形化安装向导 (推荐)</strong><div class="code-block">python install_wizard.py</div></div></div>
+                <div class="step"><div class="step-number">4</div><div class="step-content"><strong>启动系统</strong><div class="code-block">python main.py  # 选择 1/2/3 进入不同模式</div></div></div>
             </div>
-        </section>
+            <div style="text-align: center; margin-top: 2rem;"><span class="hero-badge">💡 静默安装: python install_wizard.py --unattended --product-key ...</span></div>
+        </div></section>
 
-        <!-- 版本历史 -->
-        <section id="versions" class="section">
-            <div class="container">
-                <h2 class="section-title"><i class="fas fa-history"></i> 版本历程</h2>
-                <div class="timeline">
-                    <div class="timeline-item"><div class="timeline-date">2025-06-10</div><div><strong>beta 0.0.1</strong> — 多语言初始化、加密配置、基础终端</div></div>
-                    <div class="timeline-item"><div class="timeline-date">2025-06-25</div><div><strong>beta 1.0.0</strong> — 80+命令, VFS, 双因素, 插件系统, GitHub升级</div></div>
-                    <div class="timeline-item"><div class="timeline-date">2026-05-13</div><div><strong>v1.0.0 正式版</strong> — 跨平台稳定, 自动数据仓库, SDK, 官方应用</div></div>
-                    <div class="timeline-item"><div class="timeline-date">2026-06-15</div><div><strong>v1.2.0</strong> — 🚀 应用/插件市场远程列表 (list-remote), 分类帮助, 图形界面双引擎(PyQt5+Tkinter), 静默安装, 零硬编码密钥, Web面板局域网访问</div></div>
-                </div>
-            </div>
-        </section>
+        <section id="versions" class="section"><div class="container">
+            <h2 class="section-title"><i class="fas fa-history"></i> 版本历程</h2>
+            <div class="timeline" id="versionTimeline"></div>
+            <div class="click-hint">✨ 点击任意版本查看详细更新日志</div>
+        </div></section>
 
-        <!-- 联系与许可证 -->
-        <section id="contact" class="section">
-            <div class="container" style="text-align: center;">
-                <h2 class="section-title"><i class="fas fa-envelope"></i> 联系与授权</h2>
-                <p style="margin-bottom: 1rem;">专有软件许可证 · 仅供授权使用</p>
-                <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-                    <a href="https://hz-lyxh.github.io/bloge/" class="btn btn-outline"><i class="fas fa-globe"></i> 公司官网</a>
-                    <a href="https://github.com/hz-lyxh/starsea-os" class="btn btn-outline"><i class="fab fa-github"></i> GitHub</a>
-                    <a href="mailto:lzc737507@outlook.com" class="btn btn-outline"><i class="fas fa-envelope"></i> 邮件联系</a>
-                </div>
+        <section id="spec" class="section"><div class="container">
+            <h2 class="section-title"><i class="fas fa-code-branch"></i> 版本规范</h2>
+            <div class="spec-grid">
+                <div class="spec-card"><h4>📌 版本号格式</h4><p><code>&lt;主&gt;.&lt;次&gt;.&lt;修订&gt;[-&lt;阶段&gt;.&lt;序号&gt;]</code></p><p style="margin-top:0.5rem">主版本号：不兼容变更<br>次版本号：新增功能（向下兼容）<br>修订号：问题修复<br>阶段：alpha / beta / rc</p></div>
+                <div class="spec-card"><h4>🔄 递进规则</h4><table class="spec-table"><tr><td>修复 Bug</td><td>修订号 +1</td></tr><tr><td>新增功能</td><td>次版本号 +1，修订归零</td></tr><tr><td>不兼容变更</td><td>主版本号 +1，次修归零</td></tr><tr><td>beta → rc → 正式</td><td>阶段变更，序号重置</td></tr></table></div>
+                <div class="spec-card"><h4>📦 打包策略</h4><table class="spec-table"><tr><td>alpha</td><td>❌ 仅源码</td></tr><tr><td>beta / 正式版</td><td>✅ 必须打包</td></tr><tr><td>rc</td><td>❌ 源码验证</td></tr></table></div>
+                <div class="spec-card"><h4>🔑 产品密钥绑定</h4><p>每个打包发布版本（beta 和正式版）生成唯一密钥和 bcrypt 哈希。<br>alpha / rc 沿用上一版密钥。</p></div>
             </div>
-        </section>
+        </div></section>
+
+        <section id="contact" class="section"><div class="container" style="text-align: center;">
+            <h2 class="section-title"><i class="fas fa-envelope"></i> 联系与授权</h2>
+            <p style="margin-bottom: 1rem;">专有软件许可证 · 仅供授权使用</p>
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                <a href="https://hz-lyxh.github.io/bloge/" class="btn btn-outline"><i class="fas fa-globe"></i> 公司官网</a>
+                <a href="https://github.com/hz-lyxh/starsea-os" class="btn btn-outline"><i class="fab fa-github"></i> GitHub</a>
+                <a href="mailto:lzc737507@outlook.com" class="btn btn-outline"><i class="fas fa-envelope"></i> 邮件联系</a>
+            </div>
+        </div></section>
     </main>
 
-    <footer>
-        <div class="container">
-            <p>© 2025–2026 蓝域星河有限公司集团 · 星海量子通用操作系统 StarseaOS v1.2.0</p>
-            <div class="footer-links">
-                <a href="#overview">概览</a>
-                <a href="#features">特性</a>
-                <a href="#install">安装</a>
-                <a href="#versions">版本</a>
-            </div>
-        </div>
-    </footer>
+    <footer><div class="container"><p>© 2025–2027 蓝域星河有限公司集团 · 星海量子通用操作系统 StarseaOS</p><div class="footer-links"><a href="#overview">概览</a><a href="#features">特性</a><a href="#install">安装</a><a href="#versions">版本</a><a href="#spec">规范</a></div></div></footer>
+
+    <div id="versionModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modalVersionTitle"></h3><button class="modal-close" id="closeModalBtn">&times;</button></div><div class="modal-body" id="modalBody"></div></div></div>
 
     <script>
         (function() {
-            // 深色模式
+            // 版本数据（完全对齐 更新日志.md 和版本规范）
+            const versionsData = [
+                { date: "2025-06-10", version: "0.0.1-beta.1", summary: "首个内部测试版", details: "▼ 新增功能<br>- 多语言支持（8种语言）<br>- 系统初始化向导（产品密钥验证、管理员创建、终端类型选择）<br>- 加密配置文件存储（Fernet AES-128 CBC + HMAC）<br>- 基础用户管理（管理员可添加/删除用户、修改密码）<br>- 量子终端交互环境（命令解释器、帮助系统）<br>- 虚拟文件系统基础框架<br>- 后台定时备份与报告生成<br>- 系统诊断工具<br>- 本地版本升级脚本<br>- 安全审计日志" },
+                { date: "2025-06-25", version: "1.0.0-beta.1", summary: "功能大幅增强", details: "▼ 新增功能<br><strong>一、安全增强</strong><br>- bcrypt 密钥哈希，暴力攻击锁定<br>- 双因素认证（TOTP）<br>- 硬件绑定许可证<br>- 开发者独立激活密钥<br>- 安全审计日志<br>- 配置文件加解密工具<br><strong>二、终端体验</strong><br>- 80+内置命令，Tab补全，历史，别名，7种主题<br>- 实时时钟，性能分析，沙盒执行<br><strong>三、多会话与VFS</strong><br>- 多会话管理，独立VFS，权限控制，软链接<br><strong>四、运维管理</strong><br>- 系统维护工具，还原点，版本化备份<br>- 进程管理，磁盘统计，自愈守护进程<br><strong>五、扩展与集成</strong><br>- 插件系统，脚本引擎，Cron任务，GitHub更新<br>- 网络工具，邮件通知，用户组管理<br><strong>六、数据与文档</strong><br>- 8语言界面，数据集，空白模板，自动生成安装包" },
+                { date: "2026-05-13", version: "1.0.0", summary: "首个正式稳定版", details: "▼ 新增功能<br><strong>一、独立 SDK（starsea-os-sdk）</strong><br>- 独立Python包，封装加密读写、用户管理、VFS<br><strong>二、官方应用</strong><br>- 10个官方应用：文件管理器、应用商店、图库、文本编辑器、系统监视器、日历与提醒、备份还原向导、科学计算器、星海便签、星海词典<br><strong>三、官方插件</strong><br>- 随机密码生成器、增强系统信息、随机笑话、名言警句<br><strong>四、自动化测试套件</strong><br>- 基于pytest的完整测试框架<br><strong>五、系统改进</strong><br>- 修复Windows readline，数据储存库自动重命名，会话管理增强，SDK路径自动注册" },
+                { date: "2026-06-15", version: "1.2.0", summary: "市场生态完善 & 图形界面现代化", details: "▼ 新增功能<br>- 市场生态：统一市场源，`pm list-remote`/`app list-remote`，`market_common.py`<br>- 终端优化：`help`分类关键词搜索，`vwrite`多行输入<br>- 图形界面：PyQt5优先、Tkinter回退，9个标签页<br>- 安装向导：图形化/静默安装，自动备份回滚<br>- 统一日志系统：JSON Lines + 审计日志<br>- 多平台内核增强：Android支持，GPU/USB/蓝牙等<br>- 启动器7种模式，零硬编码密钥，Web面板独立化<br>- 完整单元测试套件<br>▼ 修复（多项）<br>▼ 优化（编码规范，异常处理）" },
+                { date: "2026-07-15", version: "1.3.0-beta.1", summary: "统一架构 & Web面板独立化", details: "▼ 新增功能<br>- 应用/插件市场统一架构（`market_common.py`）<br>- 图形界面双引擎<br>- 全新安装向导（图形化/静默）<br>- 统一日志系统（JSON Lines）<br>- 配置文件路径统一<br>- 多平台内核增强（Android）<br>- Web面板独立化（0.0.0.0, Basic Auth）<br>- 启动器7种模式<br>- 完整单元测试套件<br>▼ 修复<br>▼ 优化" },
+                { date: "2026-08-15", version: "1.3.0-beta.2", summary: "SQLite缓存 & 热加载基础", details: "▼ 新增功能<br>- 市场缓存迁移至SQLite（提升并发）<br>- WebSocket实时日志<br>- 插件热加载基础<br>- 启动速度优化<br>- 单元测试覆盖率提升（`test_plugin_hot_reload.py`）<br>▼ 修复：文件锁问题，权限检查漏洞，Windows兼容性" },
+                { date: "2026-10-01", version: "1.3.0", summary: "AI助手 & 多节点部署", details: "▼ 新增功能<br>- AI助手深度集成（OpenAI/DeepSeek/通义千问）<br>- 多节点部署支持（微服务架构）<br>- 高级系统监控（实时图表，历史SQLite）<br>- 插件热加载完善<br>- Web面板增强（WebSocket日志，多会话，暗色主题）<br>- 性能优化（启动速度提升20%）<br>- 安全加固（API签名，CSRF，会话超时）" },
+                { date: "2026-11-25", version: "1.5.0", summary: "平滑过渡版（为2.0做准备）", details: "▼ 新增功能<br>- 密码兼容函数 verify_password（SHA256 + bcrypt，旧密码自动升级）<br>- 脚本引擎警告模式（非白名单命令仅警告）<br>- 插件管理器警告模式（导入system模块仅警告）<br>- RWKV 本地 AI 支持<br>- 配置热加载命令 `reload`<br>- 健康检查命令 `health`<br>- 自动生成 market_config.json（国内镜像）<br>- 添加 py.typed 类型标记" },
+                { date: "2026-12-28", version: "2.0.0-beta.1", summary: "严格安全版（破坏性变更）", details: "⚠️ 破坏性变更<br>- 移除密码兼容层，仅 bcrypt<br>- 脚本引擎严格白名单（拒绝非白名单命令）<br>- 插件系统严格隔离（导入system模块直接拒绝）<br><br>▼ 新增功能<br>- 自动迁移插件/应用（添加版本号、检测禁止导入、生成签名清单、JSON报告）<br>- 未登录用户检测（警告未升级密码的用户）<br>- 市场集成测试<br>- 终端命令补全增强（pm/app）" },
+                { date: "2027-01-31", version: "2.0.0-beta.2", summary: "增强版：签名验证、HTTPS、限流、Redis", details: "▼ 新增功能<br>- 强制市场签名验证（`MARKET_REQUIRE_SIGNATURE = True`）<br>- Web 面板 HTTPS 支持（自签名证书生成函数）<br>- API 请求限流（Flask-Limiter，默认60次/分钟）<br>- Redis 会话支持（分布式部署，新增 `REDIS_URL` 配置）<br>- 补充单元测试（热加载、微服务、市场集成）<br>- 类型注解标记（py.typed, stubs/）<br>- 日志轮转优化（10MB，保留10个备份）<br>- 每周自动清理市场缓存<br><br>▼ 依赖更新<br>- 新增依赖：Flask-Limiter, Flask-Session, redis, pyOpenSSL" }
+            ];
+
+            const timeline = document.getElementById('versionTimeline');
+            function renderTimeline() {
+                timeline.innerHTML = '';
+                versionsData.forEach(v => {
+                    const item = document.createElement('div');
+                    item.className = 'timeline-item';
+                    item.setAttribute('data-version', v.version);
+                    item.innerHTML = `<div class="timeline-date">${v.date}</div><div><div class="timeline-version">${v.version}</div><div>${v.summary}</div></div>`;
+                    item.addEventListener('click', () => showModal(v));
+                    timeline.appendChild(item);
+                });
+            }
+
+            const modal = document.getElementById('versionModal');
+            const modalTitle = document.getElementById('modalVersionTitle');
+            const modalBody = document.getElementById('modalBody');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            function showModal(v) {
+                modalTitle.innerText = `${v.version} (${v.date})`;
+                let html = v.details;
+                html = html.replace(/^-\s+(.+)$/gm, '<li>$1</li>');
+                html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+                html = html.replace(/\n/g, '<br>');
+                modalBody.innerHTML = `<div>${html}</div>`;
+                modal.style.display = 'flex';
+            }
+            function closeModal() { modal.style.display = 'none'; }
+            closeModalBtn.addEventListener('click', closeModal);
+            window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+            renderTimeline();
+
+            // 深色模式、主题切换
             const body = document.body;
             const themeToggle = document.getElementById('themeToggle');
             const savedDark = localStorage.getItem('darkMode');
-            if (savedDark === 'true') {
-                body.classList.add('dark');
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-            }
+            if (savedDark === 'true') { body.classList.add('dark'); themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; }
             themeToggle.addEventListener('click', () => {
                 body.classList.toggle('dark');
                 const isDark = body.classList.contains('dark');
                 localStorage.setItem('darkMode', isDark);
                 themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
             });
-
-            // 主题颜色切换
             const paletteBtn = document.getElementById('paletteBtn');
             const dropdown = document.getElementById('paletteDropdown');
-            paletteBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-            });
+            paletteBtn.addEventListener('click', (e) => { e.stopPropagation(); dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block'; });
             document.addEventListener('click', () => { dropdown.style.display = 'none'; });
             const savedTheme = localStorage.getItem('colorTheme') || 'cyan';
-            if (savedTheme !== 'cyan') {
-                body.classList.add(`theme-${savedTheme}`);
-            }
+            if (savedTheme !== 'cyan') body.classList.add(`theme-${savedTheme}`);
             document.querySelectorAll('.theme-opt').forEach(opt => {
                 opt.addEventListener('click', (e) => {
                     const theme = opt.getAttribute('data-theme');
@@ -639,24 +397,15 @@
                     dropdown.style.display = 'none';
                 });
             });
-
-            // 移动端菜单
             const mobileBtn = document.getElementById('mobileMenuBtn');
             const navLinks = document.getElementById('navLinks');
-            mobileBtn.addEventListener('click', () => {
-                navLinks.classList.toggle('show');
-            });
-            // 平滑滚动锚点
+            mobileBtn.addEventListener('click', () => { navLinks.classList.toggle('show'); });
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     const href = this.getAttribute('href');
                     if (href === '#') return;
                     const target = document.querySelector(href);
-                    if (target) {
-                        e.preventDefault();
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        navLinks.classList.remove('show');
-                    }
+                    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); navLinks.classList.remove('show'); }
                 });
             });
         })();
