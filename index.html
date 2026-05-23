@@ -2,19 +2,20 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
     <title>星海量子操作系统 · StarseaOS | 安全 · 智能 · 企业级量子终端</title>
     <meta name="description" content="星海量子通用操作系统 —— 多用户、多语言、高安全量子终端配置平台，集成应用/插件市场、虚拟文件系统、双因素认证、API限流、HTTPS 等企业级特性。">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             transition: background 0.3s, color 0.2s;
             scroll-behavior: smooth;
+            overflow-x: hidden;
         }
         :root {
             --bg-primary: #ffffff;
@@ -33,6 +34,7 @@
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
             --gradient-primary: linear-gradient(135deg, #06b6d4, #3b82f6);
             --radius-lg: 1.5rem;
+            --radius-md: 1rem;
         }
         body.dark {
             --bg-primary: #0f172a;
@@ -72,6 +74,9 @@
             --gradient-primary: linear-gradient(135deg, #f472b6, #ec4899);
         }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+        @media (max-width: 640px) { .container { padding: 0 1rem; } }
+        
+        /* 导航栏 */
         .navbar {
             position: sticky; top: 0; z-index: 50;
             backdrop-filter: blur(12px);
@@ -81,96 +86,153 @@
         body.dark .navbar { background: rgba(15, 23, 42, 0.8); }
         .nav-container {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 0; flex-wrap: wrap;
+            padding: 0.75rem 0; flex-wrap: wrap;
         }
         .logo {
-            font-size: 1.6rem; font-weight: 800;
+            font-size: 1.4rem; font-weight: 800;
             background: var(--gradient-primary);
             -webkit-background-clip: text; background-clip: text; color: transparent;
         }
-        .logo i { margin-right: 0.25rem; }
-        .nav-links { display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; }
-        .nav-links a { text-decoration: none; color: var(--text-primary); font-weight: 500; transition: color 0.2s; }
+        .logo i { margin-right: 0.25rem; font-size: 1.3rem; }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .nav-links a {
+            text-decoration: none; color: var(--text-primary); font-weight: 500;
+            transition: color 0.2s; padding: 0.5rem 0;
+            font-size: 0.95rem;
+        }
         .nav-links a:hover { color: var(--primary); }
-        .theme-buttons { display: flex; gap: 0.75rem; }
+        .theme-buttons { display: flex; gap: 0.5rem; }
         .icon-btn {
             background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 2rem;
-            padding: 0.5rem 0.9rem; cursor: pointer; transition: all 0.2s;
+            padding: 0.5rem 0.8rem; cursor: pointer; transition: all 0.2s;
             color: var(--text-primary); font-size: 1rem;
         }
         .icon-btn:hover { border-color: var(--primary); color: var(--primary); }
-        .mobile-menu { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); }
+        .mobile-menu {
+            display: none; background: none; border: none; font-size: 1.6rem;
+            cursor: pointer; color: var(--text-primary); padding: 0.5rem;
+            line-height: 1;
+        }
         @media (max-width: 768px) {
-            .nav-links { display: none; width: 100%; flex-direction: column; gap: 1rem; padding: 1rem 0; }
+            .nav-links {
+                display: none; width: 100%; flex-direction: column; gap: 0.8rem;
+                padding: 1rem 0; background: var(--bg-primary); border-top: 1px solid var(--border);
+                margin-top: 0.5rem;
+            }
             .nav-links.show { display: flex; }
             .mobile-menu { display: block; }
             .theme-buttons { order: 2; }
+            .nav-container { position: relative; }
         }
+        /* 按钮通用 */
         .btn {
-            display: inline-block; padding: 0.75rem 1.5rem; border-radius: 2rem;
+            display: inline-block; padding: 0.7rem 1.4rem; border-radius: 2rem;
             font-weight: 600; text-decoration: none; transition: all 0.2s;
-            border: none; cursor: pointer;
+            border: none; cursor: pointer; font-size: 0.9rem;
+            text-align: center;
         }
         .btn-primary { background: var(--primary); color: white; box-shadow: var(--shadow-sm); }
         .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
         .btn-outline { border: 1px solid var(--border); background: transparent; color: var(--text-primary); }
         .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
-        .hero { padding: 4rem 0 5rem; text-align: center; }
+        @media (max-width: 480px) {
+            .btn { padding: 0.6rem 1.2rem; font-size: 0.85rem; }
+        }
+        /* Hero 区 */
+        .hero { padding: 3rem 0 4rem; text-align: center; }
         .hero h1 {
-            font-size: 3.5rem; font-weight: 800;
+            font-size: 3rem; font-weight: 800;
             background: var(--gradient-primary); -webkit-background-clip: text; background-clip: text;
             color: transparent; margin-bottom: 1rem;
         }
-        .hero p { font-size: 1.2rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto 2rem; }
+        .hero p { font-size: 1.1rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto 2rem; padding: 0 1rem; }
         .hero-badge {
             display: inline-block; background: var(--bg-secondary); border-radius: 2rem;
-            padding: 0.3rem 1rem; font-size: 0.85rem; color: var(--primary);
+            padding: 0.3rem 1rem; font-size: 0.8rem; color: var(--primary);
             margin-bottom: 1.5rem; border: 1px solid var(--border);
         }
-        .stats-grid { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin: 3rem 0; }
-        .stat-card {
-            background: var(--bg-card); padding: 1.5rem 2rem; border-radius: var(--radius-lg);
-            text-align: center; border: 1px solid var(--border); backdrop-filter: blur(4px);
+        @media (max-width: 768px) {
+            .hero { padding: 2rem 0 3rem; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1rem; }
         }
-        .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--primary); }
-        .section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
-        .section-title { font-size: 2rem; font-weight: 700; margin-bottom: 2rem; text-align: center; }
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.8rem; }
+        }
+        /* 统计卡片 */
+        .stats-grid {
+            display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
+            margin: 2rem 0 3rem;
+        }
+        .stat-card {
+            background: var(--bg-card); padding: 1rem 1.5rem; border-radius: var(--radius-lg);
+            text-align: center; border: 1px solid var(--border); backdrop-filter: blur(4px);
+            flex: 1 1 140px; min-width: 120px;
+        }
+        .stat-number { font-size: 2rem; font-weight: 800; color: var(--primary); }
+        @media (max-width: 640px) {
+            .stats-grid { gap: 1rem; }
+            .stat-card { padding: 0.8rem 1rem; }
+            .stat-number { font-size: 1.6rem; }
+        }
+        /* 通用区块 */
+        .section { padding: 3rem 0; border-bottom: 1px solid var(--border); }
+        .section-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 1.8rem; text-align: center; }
         .section-title i { color: var(--primary); margin-right: 0.5rem; }
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+        @media (max-width: 768px) { .section { padding: 2rem 0; } .section-title { font-size: 1.5rem; } }
+        /* 卡片网格 - 响应式 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        @media (max-width: 640px) {
+            .card-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+        }
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .card-grid { grid-template-columns: repeat(2, 1fr); }
+        }
         .feature-card {
-            background: var(--bg-card); border-radius: var(--radius-lg); padding: 1.8rem;
+            background: var(--bg-card); border-radius: var(--radius-lg); padding: 1.5rem;
             transition: all 0.3s; border: 1px solid var(--border);
         }
-        .feature-card:hover { transform: translateY(-5px); border-color: var(--primary-light); box-shadow: var(--shadow-md); }
-        .feature-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
-        .feature-card h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
-        .new-tag { background: var(--primary); color: white; font-size: 0.7rem; padding: 0.2rem 0.7rem; border-radius: 1rem; margin-left: 0.5rem; vertical-align: middle; }
-        .arch-preview { background: var(--bg-secondary); border-radius: var(--radius-lg); padding: 1.5rem; overflow-x: auto; font-family: monospace; font-size: 0.85rem; border: 1px solid var(--border); }
-        .steps-container { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
-        .step { display: flex; gap: 1rem; }
-        .step-number { background: var(--primary); color: white; width: 2rem; height: 2rem; border-radius: 2rem; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
-        .code-block { background: var(--bg-primary); padding: 0.5rem 1rem; border-radius: 1rem; font-family: monospace; border: 1px solid var(--border); margin-top: 0.5rem; }
-        .timeline { display: flex; flex-direction: column; gap: 1.5rem; }
+        .feature-card:hover { transform: translateY(-4px); border-color: var(--primary-light); box-shadow: var(--shadow-md); }
+        .feature-icon { font-size: 2rem; color: var(--primary); margin-bottom: 0.8rem; }
+        .feature-card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .new-tag { background: var(--primary); color: white; font-size: 0.65rem; padding: 0.2rem 0.6rem; border-radius: 1rem; margin-left: 0.5rem; vertical-align: middle; }
+        /* 架构预览 */
+        .arch-preview { background: var(--bg-secondary); border-radius: var(--radius-lg); padding: 1.2rem; overflow-x: auto; font-family: monospace; font-size: 0.8rem; border: 1px solid var(--border); }
+        .arch-preview pre { white-space: pre-wrap; word-break: break-word; }
+        /* 安装步骤 */
+        .steps-container { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.2rem; }
+        .step { display: flex; gap: 1rem; align-items: flex-start; }
+        .step-number { background: var(--primary); color: white; width: 2rem; height: 2rem; border-radius: 2rem; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; margin-top: 0.1rem; }
+        .code-block { background: var(--bg-primary); padding: 0.5rem 0.8rem; border-radius: var(--radius-md); font-family: monospace; font-size: 0.85rem; border: 1px solid var(--border); margin-top: 0.5rem; overflow-x: auto; }
+        /* 时间线 */
+        .timeline { display: flex; flex-direction: column; gap: 1rem; }
         .timeline-item {
-            display: flex; gap: 1.5rem; border-left: 2px solid var(--primary); padding-left: 1.5rem;
+            display: flex; gap: 1rem; border-left: 2px solid var(--primary); padding-left: 1rem;
             cursor: pointer; transition: background 0.2s; border-radius: 0.5rem;
+            min-height: 60px; align-items: flex-start;
         }
         .timeline-item:hover { background: var(--bg-secondary); }
-        .timeline-date { font-weight: 600; color: var(--primary); min-width: 100px; }
-        .timeline-version { font-weight: 700; }
-        .click-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; text-align: center; margin-bottom: 1rem; }
+        .timeline-date { font-weight: 600; color: var(--primary); min-width: 90px; font-size: 0.85rem; }
+        .timeline-version { font-weight: 700; font-size: 0.95rem; }
+        .click-hint { font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 0.5rem; margin-bottom: 1rem; }
+        @media (max-width: 640px) {
+            .timeline-item { flex-direction: column; gap: 0.3rem; border-left-width: 3px; padding-left: 0.8rem; }
+            .timeline-date { min-width: auto; }
+        }
+        /* 版本规范表格 */
         .spec-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem;
             margin-top: 1.5rem;
         }
-        .spec-card {
-            background: var(--bg-card); border-radius: var(--radius-lg); padding: 1.2rem;
-            border: 1px solid var(--border);
-        }
-        .spec-card h4 { margin-bottom: 0.75rem; color: var(--primary); }
-        .spec-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        .spec-table td, .spec-table th { padding: 0.4rem; border-bottom: 1px solid var(--border); text-align: left; }
-        /* 通用模态框样式 */
+        .spec-card { background: var(--bg-card); border-radius: var(--radius-lg); padding: 1rem; border: 1px solid var(--border); }
+        .spec-card h4 { margin-bottom: 0.5rem; color: var(--primary); font-size: 1rem; }
+        .spec-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        .spec-table td, .spec-table th { padding: 0.3rem; border-bottom: 1px solid var(--border); text-align: left; }
+        /* 模态框优化 */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.7); z-index: 1000; justify-content: center; align-items: center;
@@ -178,26 +240,24 @@
         }
         .modal-content {
             background: var(--bg-card); border-radius: var(--radius-lg); max-width: 850px; width: 90%;
-            max-height: 80vh; overflow-y: auto; padding: 1.8rem; position: relative;
+            max-height: 85vh; overflow-y: auto; padding: 1.2rem; position: relative;
             border: 1px solid var(--border); box-shadow: var(--shadow-lg);
         }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; margin-bottom: 1.25rem; }
-        .modal-header h3 { font-size: 1.5rem; color: var(--primary); }
-        .modal-close { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--text-muted); }
-        .modal-close:hover { color: var(--primary); }
-        .modal-body { font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
-        .modal-body pre {
-            background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md);
-            overflow-x: auto; font-family: monospace; font-size: 0.85rem;
-            white-space: pre-wrap; word-break: break-word;
+        @media (max-width: 640px) {
+            .modal-content { width: 95%; padding: 1rem; max-height: 90vh; }
         }
-        .badge-breaking { background: #ef4444; color: white; font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 1rem; margin-left: 0.5rem; vertical-align: middle; }
-        .changelog-section { margin-top: 1rem; }
-        .changelog-section strong { color: var(--primary); display: inline-block; margin-top: 0.5rem; margin-bottom: 0.25rem; }
-        .changelog-section h4 { font-size: 1rem; margin-top: 0.75rem; margin-bottom: 0.25rem; color: var(--text-primary); border-left: 3px solid var(--primary); padding-left: 0.5rem; }
-        footer { background: var(--bg-secondary); padding: 2.5rem 0; text-align: center; border-top: 1px solid var(--border); }
-        .footer-links { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
-        .footer-links a { color: var(--text-muted); text-decoration: none; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.6rem; margin-bottom: 1rem; }
+        .modal-header h3 { font-size: 1.3rem; color: var(--primary); }
+        .modal-close { background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--text-muted); line-height: 1; padding: 0 0.5rem; }
+        .modal-close:hover { color: var(--primary); }
+        .modal-body { font-size: 0.9rem; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+        .modal-body pre { background: var(--bg-secondary); padding: 0.8rem; border-radius: var(--radius-md); overflow-x: auto; font-size: 0.8rem; white-space: pre-wrap; }
+        .changelog-section ul { margin-left: 1.2rem; margin-top: 0.3rem; }
+        .changelog-section li { margin-bottom: 0.3rem; }
+        /* 底部 */
+        footer { background: var(--bg-secondary); padding: 2rem 0; text-align: center; border-top: 1px solid var(--border); }
+        .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-top: 0.8rem; flex-wrap: wrap; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; }
         .footer-links a:hover { color: var(--primary); }
     </style>
 </head>
@@ -205,7 +265,7 @@
     <nav class="navbar">
         <div class="container nav-container">
             <div class="logo"><i class="fas fa-atom"></i> 星海量子<span style="background: none;">OS</span></div>
-            <button class="mobile-menu" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+            <button class="mobile-menu" id="mobileMenuBtn" aria-label="菜单"><i class="fas fa-bars"></i></button>
             <div class="nav-links" id="navLinks">
                 <a href="#overview">概览</a> <a href="#features">特性</a> <a href="#architecture">架构</a>
                 <a href="#install">安装</a> <a href="#versions">版本</a> <a href="#spec">版本规范</a> <a href="#contact">联系</a>
@@ -213,7 +273,7 @@
             <div class="theme-buttons">
                 <button class="icon-btn" id="themeToggle" title="深色模式"><i class="fas fa-moon"></i></button>
                 <div style="position: relative;">
-                    <button class="icon-btn" id="paletteBtn"><i class="fas fa-palette"></i></button>
+                    <button class="icon-btn" id="paletteBtn" title="主题色"><i class="fas fa-palette"></i></button>
                     <div id="paletteDropdown" style="display: none; position: absolute; right: 0; top: 2.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 1rem; padding: 0.5rem; z-index: 100; width: 150px;">
                         <div data-theme="cyan" class="theme-opt" style="padding: 0.5rem; cursor: pointer;">🌊 青蓝</div>
                         <div data-theme="violet" class="theme-opt" style="padding: 0.5rem; cursor: pointer;">🪻 紫罗兰</div>
@@ -319,7 +379,7 @@
         <section id="contact" class="section"><div class="container" style="text-align: center;">
             <h2 class="section-title"><i class="fas fa-envelope"></i> 联系与授权</h2>
             <p style="margin-bottom: 1rem;">专有软件许可证 · 仅供授权使用</p>
-            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+            <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
                 <a href="https://hz-lyxh.github.io/bloge/" class="btn btn-outline"><i class="fas fa-globe"></i> 公司官网</a>
                 <a href="https://github.com/hz-lyxh/starsea-os" class="btn btn-outline"><i class="fab fa-github"></i> GitHub</a>
                 <a href="javascript:void(0)" class="btn btn-outline" id="licenseBtn"><i class="fas fa-file-alt"></i> 许可证</a>
@@ -337,7 +397,7 @@
 
     <script>
         (function() {
-            // ================== 版本时间线数据 ==================
+            // 版本元数据
             const versionsMeta = [
                 { date: "2025-06-10", version: "0.0.1-beta.1", summary: "首个内部测试版" },
                 { date: "2025-06-25", version: "1.0.0-beta.1", summary: "功能大幅增强" },
@@ -350,17 +410,12 @@
                 { date: "2026-12-28", version: "2.0.0-beta.1", summary: "严格安全版（破坏性变更）" },
                 { date: "2027-01-31", version: "2.0.0-beta.2", summary: "增强版：签名验证、HTTPS、限流、Redis" }
             ];
-
             const timeline = document.getElementById('versionTimeline');
             let fullChangelogMap = new Map();
-
-            function escapeRegex(string) {
-                return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            }
-
-            function parseChangelogForVersion(markdownText, version) {
-                const versionRegex = new RegExp(`\\*\\*版本：${escapeRegex(version)}\\*\\*\\s*\\n\\*\\*发布日期：([\\d-]+)\\*\\*\\s*\\n([\\s\\S]*?)(?=\\n={4,}\\n|\\n\\*\\*版本：|$)`, 'i');
-                const match = versionRegex.exec(markdownText);
+            function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+            function parseChangelogForVersion(markdown, version) {
+                const regex = new RegExp(`\\*\\*版本：${escapeRegex(version)}\\*\\*\\s*\\n\\*\\*发布日期：([\\d-]+)\\*\\*\\s*\\n([\\s\\S]*?)(?=\\n={4,}\\n|\\n\\*\\*版本：|$)`, 'i');
+                const match = regex.exec(markdown);
                 if (match && match[2]) {
                     let content = match[2].trim();
                     content = content
@@ -375,41 +430,34 @@
                 }
                 return `<div class="changelog-section"><p>未找到该版本的详细日志，请查看项目 <code>更新日志.md</code> 文件。</p></div>`;
             }
-
             async function showVersionModal(version) {
                 const modal = document.getElementById('versionModal');
-                const modalTitle = document.getElementById('modalVersionTitle');
-                const modalBody = document.getElementById('modalBody');
-                modalTitle.innerText = `${version}`;
-                
+                const title = document.getElementById('modalVersionTitle');
+                const body = document.getElementById('modalBody');
+                title.innerText = version;
                 if (fullChangelogMap.has(version)) {
-                    modalBody.innerHTML = fullChangelogMap.get(version);
+                    body.innerHTML = fullChangelogMap.get(version);
                     modal.style.display = 'flex';
                     return;
                 }
-                
-                modalBody.innerHTML = '<p style="text-align:center;"><i class="fas fa-spinner fa-pulse"></i> 正在加载完整更新日志...</p>';
+                body.innerHTML = '<p style="text-align:center;"><i class="fas fa-spinner fa-pulse"></i> 正在加载完整更新日志...</p>';
                 modal.style.display = 'flex';
-                
                 try {
-                    const response = await fetch('更新日志.md');
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    const markdown = await response.text();
-                    const detailsHtml = parseChangelogForVersion(markdown, version);
-                    fullChangelogMap.set(version, detailsHtml);
-                    modalBody.innerHTML = detailsHtml;
-                } catch (error) {
-                    console.error('加载更新日志失败:', error);
-                    modalBody.innerHTML = `<div class="changelog-section"><p>⚠️ 无法加载完整日志文件，请确保网站根目录存在 <code>更新日志.md</code> 文件。</p><p>您也可以直接查看项目仓库中的完整更新记录。</p></div>`;
+                    const resp = await fetch('更新日志.md');
+                    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                    const md = await resp.text();
+                    const html = parseChangelogForVersion(md, version);
+                    fullChangelogMap.set(version, html);
+                    body.innerHTML = html;
+                } catch(e) {
+                    body.innerHTML = `<p>⚠️ 无法加载更新日志.md，请确保文件存在。</p>`;
                 }
             }
-
             function renderTimeline() {
                 timeline.innerHTML = '';
                 versionsMeta.forEach(v => {
                     const item = document.createElement('div');
                     item.className = 'timeline-item';
-                    item.setAttribute('data-version', v.version);
                     item.innerHTML = `<div class="timeline-date">${v.date}</div><div><div class="timeline-version">${v.version}</div><div>${v.summary}</div></div>`;
                     item.addEventListener('click', () => showVersionModal(v.version));
                     timeline.appendChild(item);
@@ -417,47 +465,35 @@
             }
             renderTimeline();
 
-            // ================== 许可证动态加载 ==================
+            // 许可证动态加载
             const licenseBtn = document.getElementById('licenseBtn');
             const licenseModal = document.getElementById('licenseModal');
-            const licenseModalBody = document.getElementById('licenseModalBody');
-            const closeLicenseModalBtn = document.getElementById('closeLicenseModalBtn');
-
-            async function loadAndShowLicense() {
-                licenseModalBody.innerHTML = '<pre><i class="fas fa-spinner fa-pulse"></i> 正在加载 LICENSE.txt ...</pre>';
+            const licenseBody = document.getElementById('licenseModalBody');
+            const closeLicense = document.getElementById('closeLicenseModalBtn');
+            async function loadLicense() {
+                licenseBody.innerHTML = '<pre><i class="fas fa-spinner fa-pulse"></i> 加载 LICENSE.txt ...</pre>';
                 licenseModal.style.display = 'flex';
                 try {
-                    const response = await fetch('LICENSE.txt');
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    const licenseText = await response.text();
-                    // 使用 <pre> 保持原格式，并做 HTML 转义以防止 XSS（但纯文本一般安全）
-                    const escaped = licenseText.replace(/[&<>]/g, function(m) {
-                        if (m === '&') return '&amp;';
-                        if (m === '<') return '&lt;';
-                        if (m === '>') return '&gt;';
-                        return m;
-                    });
-                    licenseModalBody.innerHTML = `<pre>${escaped}</pre>`;
-                } catch (error) {
-                    console.error('加载许可证失败:', error);
-                    licenseModalBody.innerHTML = `<p>⚠️ 无法加载 LICENSE.txt 文件。请确保该文件存在于网站根目录，或访问 <a href="https://github.com/hz-lyxh/starsea-os/blob/main/LICENSE.txt" target="_blank">GitHub 上的许可证</a>。</p>`;
+                    const resp = await fetch('LICENSE.txt');
+                    if (!resp.ok) throw new Error();
+                    const text = await resp.text();
+                    const escaped = text.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
+                    licenseBody.innerHTML = `<pre>${escaped}</pre>`;
+                } catch(e) {
+                    licenseBody.innerHTML = `<p>⚠️ 无法加载 LICENSE.txt，请访问 <a href="https://github.com/hz-lyxh/starsea-os/blob/main/LICENSE.txt" target="_blank">GitHub 许可证</a>。</p>`;
                 }
             }
+            licenseBtn.addEventListener('click', loadLicense);
+            closeLicense.addEventListener('click', () => licenseModal.style.display = 'none');
+            window.addEventListener('click', (e) => { if (e.target === licenseModal) licenseModal.style.display = 'none'; });
 
-            licenseBtn.addEventListener('click', loadAndShowLicense);
-
-            function closeLicenseModal() { licenseModal.style.display = 'none'; }
-            closeLicenseModalBtn.addEventListener('click', closeLicenseModal);
-            window.addEventListener('click', (e) => { if (e.target === licenseModal) closeLicenseModal(); });
-
-            // ================== 通用弹窗关闭逻辑（版本弹窗） ==================
+            // 版本弹窗关闭
             const versionModal = document.getElementById('versionModal');
-            const closeVersionModalBtn = document.getElementById('closeModalBtn');
-            function closeVersionModal() { versionModal.style.display = 'none'; }
-            closeVersionModalBtn.addEventListener('click', closeVersionModal);
-            window.addEventListener('click', (e) => { if (e.target === versionModal) closeVersionModal(); });
+            const closeVersion = document.getElementById('closeModalBtn');
+            closeVersion.addEventListener('click', () => versionModal.style.display = 'none');
+            window.addEventListener('click', (e) => { if (e.target === versionModal) versionModal.style.display = 'none'; });
 
-            // ================== 主题切换 / 移动端菜单等（保持不变） ==================
+            // 深色/主题/移动端菜单
             const body = document.body;
             const themeToggle = document.getElementById('themeToggle');
             const savedDark = localStorage.getItem('darkMode');
