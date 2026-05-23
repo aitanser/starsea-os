@@ -94,7 +94,9 @@
             -webkit-background-clip: text; background-clip: text; color: transparent;
         }
         .logo i { margin-right: 0.25rem; font-size: 1.3rem; }
-        .nav-links { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .nav-links {
+            display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;
+        }
         .nav-links a {
             text-decoration: none; color: var(--text-primary); font-weight: 500;
             transition: color 0.2s; padding: 0.5rem 0;
@@ -115,14 +117,34 @@
         }
         @media (max-width: 768px) {
             .nav-links {
-                display: none; width: 100%; flex-direction: column; gap: 0.8rem;
-                padding: 1rem 0; background: var(--bg-primary); border-top: 1px solid var(--border);
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 0.8rem;
+                padding: 1rem 0;
+                background: var(--bg-primary);
+                border-top: 1px solid var(--border);
                 margin-top: 0.5rem;
+                /* 关键修复：允许滚动，防止菜单项过多被截断 */
+                max-height: 70vh;
+                overflow-y: auto;
+                border-radius: 0 0 var(--radius-md) var(--radius-md);
+                box-shadow: var(--shadow-md);
+            }
+            .nav-links a {
+                padding: 0.8rem 0.5rem;
+                font-size: 1rem;
+                border-left: 3px solid transparent;
+                transition: all 0.1s;
+            }
+            .nav-links a:hover, .nav-links a:active {
+                border-left-color: var(--primary);
+                background: var(--bg-secondary);
+                padding-left: 1rem;
             }
             .nav-links.show { display: flex; }
             .mobile-menu { display: block; }
             .theme-buttons { order: 2; }
-            .nav-container { position: relative; }
         }
         /* 按钮通用 */
         .btn {
@@ -267,8 +289,13 @@
             <div class="logo"><i class="fas fa-atom"></i> 星海量子<span style="background: none;">OS</span></div>
             <button class="mobile-menu" id="mobileMenuBtn" aria-label="菜单"><i class="fas fa-bars"></i></button>
             <div class="nav-links" id="navLinks">
-                <a href="#overview">概览</a> <a href="#features">特性</a> <a href="#architecture">架构</a>
-                <a href="#install">安装</a> <a href="#versions">版本</a> <a href="#spec">版本规范</a> <a href="#contact">联系</a>
+                <a href="#overview">概览</a>
+                <a href="#features">特性</a>
+                <a href="#architecture">架构</a>
+                <a href="#install">安装</a>
+                <a href="#versions">版本</a>
+                <a href="#spec">版本规范</a>
+                <a href="#contact">联系</a>
             </div>
             <div class="theme-buttons">
                 <button class="icon-btn" id="themeToggle" title="深色模式"><i class="fas fa-moon"></i></button>
@@ -370,8 +397,15 @@
             <h2 class="section-title"><i class="fas fa-code-branch"></i> 版本规范</h2>
             <div class="spec-grid">
                 <div class="spec-card"><h4>📌 版本号格式</h4><p><code>&lt;主&gt;.&lt;次&gt;.&lt;修订&gt;[-&lt;阶段&gt;.&lt;序号&gt;]</code></p><p style="margin-top:0.5rem">主版本号：不兼容变更<br>次版本号：新增功能（向下兼容）<br>修订号：问题修复<br>阶段：alpha / beta / rc</p></div>
-                <div class="spec-card"><h4>🔄 递进规则</h4><table class="spec-table"><tr><td>修复Bug</td><td>修订号 +1</td></tr><tr><td>新增功能</td><td>次版本号 +1，修订归零</td></tr><tr><td>不兼容变更</td><td>主版本号 +1，次修归零</td></tr><tr><td>beta → rc → 正式</td><td>阶段变更，序号重置</td></tr></table></div>
-                <div class="spec-card"><h4>📦 打包策略</h4><table class="spec-table"><tr><td>alpha</td><td>❌ 仅源码</td></tr><tr><td>beta / 正式版</td><td>✅ 必须打包</td></tr><tr><td>rc</td><td>❌ 源码验证</td></tr></table></div>
+                <div class="spec-card"><h4>🔄 递进规则</h4><table class="spec-table"><tr><td>修复Bug</td><td>修订号 +1</td></tr>
+                    <tr><td>新增功能</td><td>次版本号 +1，修订归零</td></tr>
+                    <tr><td>不兼容变更</td><td>主版本号 +1，次修归零</td></tr>
+                    <tr><td>beta → rc → 正式</td><td>阶段变更，序号重置</td></tr>
+                </table></div>
+                <div class="spec-card"><h4>📦 打包策略</h4><table class="spec-table"><tr><td>alpha</td><td>❌ 仅源码</td></tr>
+                    <tr><td>beta / 正式版</td><td>✅ 必须打包</td></tr>
+                    <tr><td>rc</td><td>❌ 源码验证</td></tr>
+                </table></div>
                 <div class="spec-card"><h4>🔑 产品密钥绑定</h4><p>每个打包发布版本（beta 和正式版）生成唯一密钥和 bcrypt 哈希。<br>alpha / rc 沿用上一版密钥。</p></div>
             </div>
         </div></section>
@@ -522,12 +556,25 @@
             const mobileBtn = document.getElementById('mobileMenuBtn');
             const navLinks = document.getElementById('navLinks');
             mobileBtn.addEventListener('click', () => { navLinks.classList.toggle('show'); });
+            // 点击菜单项后自动关闭菜单
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        navLinks.classList.remove('show');
+                    }
+                });
+            });
+            // 平滑滚动
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
                     const href = this.getAttribute('href');
                     if (href === '#') return;
                     const target = document.querySelector(href);
-                    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); navLinks.classList.remove('show'); }
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        if (window.innerWidth <= 768) navLinks.classList.remove('show');
+                    }
                 });
             });
         })();
