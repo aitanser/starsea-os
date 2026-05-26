@@ -380,8 +380,8 @@
             <h2 class="section-title"><i class="fas fa-envelope"></i> 联系与授权</h2>
             <p style="margin-bottom: 1rem;">专有软件许可证 · 仅供授权使用</p>
             <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-                <a href="https://hz-lyxh.github.io/bloge/" class="btn btn-outline"><i class="fas fa-globe"></i> 公司官网</a>
-                <a href="https://github.com/hz-lyxh/starsea-os" class="btn btn-outline"><i class="fab fa-github"></i> GitHub</a>
+                <a href="https://aitanser.github.io/bloge/" class="btn btn-outline"><i class="fas fa-globe"></i> 公司官网</a>
+                <a href="https://github.com/aitanser/starsea-os" class="btn btn-outline"><i class="fab fa-github"></i> GitHub</a>
                 <a href="javascript:void(0)" class="btn btn-outline" id="licenseBtn"><i class="fas fa-file-alt"></i> 许可证</a>
             </div>
         </div></section>
@@ -480,7 +480,7 @@
                     const escaped = text.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
                     licenseBody.innerHTML = `<pre>${escaped}</pre>`;
                 } catch(e) {
-                    licenseBody.innerHTML = `<p>⚠️ 无法加载 LICENSE.txt，请访问 <a href="https://github.com/hz-lyxh/starsea-os/blob/main/LICENSE.txt" target="_blank">GitHub 许可证</a>。</p>`;
+                    licenseBody.innerHTML = `<p>⚠️ 无法加载 LICENSE.txt，请访问 <a href="https://github.com/aitanser/starsea-os/blob/main/LICENSE.txt" target="_blank">GitHub 许可证</a>。</p>`;
                 }
             }
             licenseBtn.addEventListener('click', loadLicense);
